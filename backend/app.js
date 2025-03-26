@@ -22,6 +22,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+    console.log(`Received ${req.method} request on ${req.url}`);
+    next();
+});
+
 app.use("/student", studentRoutes);
 app.use("/company", companyRoutes);
 app.use("/admin", adminRoutes);
+
+
+module.exports = app;

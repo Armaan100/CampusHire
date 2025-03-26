@@ -1,11 +1,13 @@
 const jwt = require('jsonwebtoken');
-const {db} = require('../db/db');
+const db = require('../db/db');
 
 //student auth
 module.exports.authStudent = async(req, res, next) => {
     try{
         //extract token from cookies or authorization header
+        console.log("Auth Student...");
         const token = req.cookies.token || req.headers.authorization.split(' ')[1];
+        console.log(req.headers.authorization.split(' ')[1]);
 
         if(!token){
             return res.status(401).json({
@@ -16,21 +18,32 @@ module.exports.authStudent = async(req, res, next) => {
 
         //verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const id = decoded.id;  //id <-> rollNumber
+        const rollNumber = decoded.id;  //id <-> rollNumber
+        console.log(rollNumber)
 
-        //fetch student from db using id(rollNumber)
-        const [student] = await db.execute("SELECT * FROM student WHERE roll_number = ?", [id]);
+        //fetch student from db using rollNumber
+        const query = "SELECT * FROM Student WHERE roll_number = ?";
+        db.query(query, [rollNumber], (err, result) => {
+            if(err){
+                return res.status(500).json({
+                    success: false,
+                    error: err.message
+                })
+            }
 
-        if (student.length === 0) {
-            return res.status(401).json({
-                success: false,
-                message: 'Unauthorized: Invalid student'
-            });
-        }
+            console.log(result[0]);
 
-        //attach student to req object
-        req.student = student[0];
-        next();
+            if(result.length === 0){
+                return res.status(401).json({
+                    success: false,
+                    message: "Unauthorized: Invalid Student"
+                })
+            }
+
+            //attach student to req object
+            req.student = result[0];
+            next();
+        })
     }catch(err){
         return res.status(500).json({
             success: false,
@@ -56,21 +69,31 @@ module.exports.authCompany = async(req, res, next) => {
 
         //verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const id = decoded.id;  
+        const company_id = decoded.id;  
 
-        //fetch student from db using id(rollNumber)
-        const [company] = await db.execute("SELECT * FROM company WHERE id = ?", [id]);
+        //fetch company from db using companny_id
+        const query = "SELECT * FROM company WHERE company_id = ?";
+        db.query(query, [company_id], (err, result) => {
+            if(err){
+                return res.status(500).json({
+                    success: false,
+                    error: err.message
+                })
+            }
 
-        if (company.length === 0) {
-            return res.status(401).json({
-                success: false,
-                message: 'Unauthorized: Invalid company'
-            });
-        }
+            console.log(result[0]);
 
-        //attach student to req object
-        req.company = company[0];
-        next();
+            if(result.length === 0){
+                return res.status(401).json({
+                    success: false,
+                    message: "Unauthorized: Invalid Company"
+                })
+            }
+
+            //attach student to req object
+            req.company = result[0];
+            next();
+        })
     }catch(err){
         return res.status(500).json({
             success: false,
@@ -96,21 +119,31 @@ module.exports.authAdmin = async(req, res, next) => {
 
         //verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const id = decoded.id;  
+        const admin_id = decoded.id;  
 
-        //fetch student from db using id(rollNumber)
-        const [admin] = await db.execute("SELECT * FROM admin WHERE id = ?", [id]);
-
-        if (admin.length === 0) {
-            return res.status(401).json({
-                success: false,
-                message: 'Unauthorized: Invalid admin'
-            });
-        }
-
-        //attach student to req object
-        req.admin = admin[0];
-        next();
+         //fetch company from db using companny_id
+         const query = "SELECT * FROM admin WHERE admin_id = ?";
+         db.query(query, [admin_id], (err, result) => {
+             if(err){
+                 return res.status(500).json({
+                     success: false,
+                     error: err.message
+                 })
+             }
+ 
+             console.log(result[0]);
+ 
+             if(result.length === 0){
+                 return res.status(401).json({
+                     success: false,
+                     message: "Unauthorized: Invalid Admin"
+                 })
+             }
+ 
+             //attach student to req object
+             req.admin = result[0];
+             next();
+         })
     }catch(err){
         return res.status(500).json({
             success: false,

@@ -24,13 +24,18 @@ router.post("/login",[
 
 router.get("/logout", authStudent, studentController.Logout);
 
-router.post("/uploadResume", authStudent, upload.single('resume'), studentController.UploadResume);
+router.post("/upload-resume", authStudent, upload.single('resume'), studentController.UploadResume);
 
-router.get("/getFullTime", authStudent, studentController.GetFullTime);
+router.get("/get-full-time", authStudent, studentController.GetFullTime);
 
-router.get("/getInternships", authStudent, studentController.GetInternships);
+router.get("/get-internships", authStudent, studentController.GetInternships);
 
-router.post("/applyJob", authStudent, studentController.ApplyJob);
+router.post("/apply-job", authStudent, studentController.ApplyJob);
 
+router.post("/submit-coding-test", authStudent, studentController.SubmitCodingTest);
+
+router.get("/profile", authStudent, studentController.GetProfile);
+
+router.get("/get-application-details/:job_id", authStudent, studentController.GetApplicationDetails);  //to be done
 
 module.exports = router;
