@@ -229,6 +229,7 @@ module.exports.GetFullTime = async(req, res) => {
 }
 
 
+
 //getInternships
 module.exports.GetInternships = async(req, res) => {
     try{
