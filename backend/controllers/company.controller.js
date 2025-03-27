@@ -154,7 +154,8 @@ module.exports.PostJob = async (req, res) => {
     const {title, description, eligibility_cgpa, eligibility_year, salary, type, deadline} = req.body;
 
     //find the company_id from the token
-    const company_id = req.company.id;
+    const company_id = req.company.company_id;
+    console.log(company_id);
 
     // const posted_date = new Date().toLocaleDateString("en-GB").split("/").reverse().join("-");
     const posted_date = new Date().toISOString().split("T")[0];
@@ -162,7 +163,7 @@ module.exports.PostJob = async (req, res) => {
     //check if deadline is greater than the posted_date or not
     
     // Input validation
-    if (!title || !eligibility_cgpa || !eligibility_year || !type || !posted_date || !deadline || !salary) {
+    if (!company_id || !title || !eligibility_cgpa || !eligibility_year || !type || !posted_date || !deadline || !salary) {
         return res.status(400).json({
             success: false,
             message: 'All fields are required',

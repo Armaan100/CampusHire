@@ -70,6 +70,7 @@ module.exports.authCompany = async(req, res, next) => {
         //verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const company_id = decoded.id;  
+        console.log(company_id);
 
         //fetch company from db using companny_id
         const query = "SELECT * FROM company WHERE company_id = ?";
