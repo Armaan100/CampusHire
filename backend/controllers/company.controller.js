@@ -317,7 +317,7 @@ module.exports.SendCodingTest = async(req, res) => {
 }
 
 
-//getApplicationsPhase2 <-> jaar jaar resume shortlist hol and they had given the test eheti fetch hobo
+//getApplicationsPhase2 <-> jaar jaar resume shortlist hol and they HAD SUBMITTED THE CODING TEST( to be done yoooo ( student tu kori korim yooo ) ) eheti fetch hobo
 module.exports.GetApplicationsPhase2 = async(req, res) => {
   try{
     const company_id = req.company.company_id;
@@ -432,22 +432,25 @@ module.exports.GetApplicationsPhase3 = async(req, res) => {
 //Schedule Interview
 module.exports.ScheduleInterview = async(req, res) => {
   try{
-    const { roll_number, job_id, interview_time, interview_venue } = req.body;
+    const { roll_number, job_id, interview_date_time, interview_venue } = req.body;
 
-    if (!interview_time || !interview_venue) {
+    //interview_date_time: "2021-08-10 10:00:00"
+
+    if (!interview_date_time || !interview_venue) {
       return res.status(400).json({
           success: false,
           message: 'Interview time and venue are required',
       });
     }
 
+    //same iyatu since frontend t only company r applications show koribo so, company_id di query update koribo nelage
     const query = `
     UPDATE Application
-    SET interview_time = ?, interview_venue = ?
+    SET interview_date_time = ?, interview_venue = ?
     WHERE roll_number = ? AND job_id = ?
     `;
 
-    db.query(query, [interview_time, interview_venue, roll_number, job_id], (err, result) => {
+    db.query(query, [interview_date_time, interview_venue, roll_number, job_id], (err, result) => {
       if (err) {
         return res.status(500).json({
             success: false,
@@ -455,16 +458,53 @@ module.exports.ScheduleInterview = async(req, res) => {
         });
       }
 
-      res.staus(200).json({
+      res.status(200).json({
         success: true,
         message: "Interview scheduled successfully"
       })
     });
   }catch(err){
-    return res.staus(500).json({
+    return res.status(500).json({
       success: false,
       error: err.message
     })
+  }
+}
+
+
+//GetApplicationsPhase3 <-> jaar jaar coding test accept hol eheti fetch hobo and mark time finally ki interview clear koril ne nai based on the interview
+module.exports.GetApplicationsPhase3 = async(req, res) => {
+  try{
+    const company_id = req.company.company_id;
+
+    //fetch all applications whose coding test has been accepted to this company
+    const query = `
+    SELECT A.roll_number, A.job_id,
+    J.title, J.description, 
+    S.name, S.email, S.resume
+    FROM application A, job J, student S
+    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.coding_test_status = ?
+    `;
+
+    db.query(query, [company_id, 'accepted'], (err, result) => {
+      if(err){
+        return res.status(500).json({
+          success: false,
+          error: err.message
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        applications: result
+      })
+    });
+
+  }catch(err){
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
   }
 }
 
@@ -480,7 +520,12 @@ module.exports.EvaluateInterview = async(req, res) => {
     WHERE roll_number = ? AND job_id = ?
     `;
 
-    db.query(query, [interview_status, interview_status, roll_number, job_id], (err, result) => {
+    let overall_status = 'rejected';
+    if(interview_status === 'accepted'){
+      overall_status = 'accepted';
+    }
+
+    db.query(query, [interview_status, overall_status, roll_number, job_id], (err, result) => {
       if(err){
         return res.status(500).json({
           success: false,
@@ -500,3 +545,7 @@ module.exports.EvaluateInterview = async(req, res) => {
     })
   }
 }
+
+// done till here✅😎 yo
+// bass olop corner cases and like sending the data olop bhalke and majot eta part where only coding test dile heitu he data set pothabo ase and not 
+// coding test accept ne reject hol
