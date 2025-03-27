@@ -207,7 +207,7 @@ module.exports.GetFullTime = async(req, res) => {
 
         const query = "SELECT * FROM Job WHERE eligibility_year = ? AND eligibility_cgpa <= ? AND type='FullTime'";
 
-        db.query(query, [student.year_of_passing, student.currentCGPA], (err, result) => {
+        db.query(query, [student.year_of_passing, student.current_cgpa], (err, result) => {
             if(err){
                 return res.status(500).json({
                     success: false,
@@ -234,16 +234,19 @@ module.exports.GetFullTime = async(req, res) => {
 module.exports.GetInternships = async(req, res) => {
     try{
         const student = req.student;
+        console.log(req.student);
 
         const query = "SELECT * FROM Job WHERE eligibility_year = ? AND eligibility_cgpa <= ? AND type='Internship'"
 
-        db.query(query, [student.year_of_passing, student.currentCGPA], (err, result) => {
+        db.query(query, [student.year_of_passing, student.current_cgpa], (err, result) => {
             if(err){
                 return res.status(500).json({
                     success: false,
                     error: err.message
                 })
             }
+
+            console.log(result);
 
             return res.status(200).json({
                 success: true,

@@ -202,8 +202,7 @@ module.exports.PostJob = async (req, res) => {
 //GetApplications
 module.exports.GetApplications = async(req, res) => {
   try{
-    const company = req.company;
-    const company_id = company.id;
+    const company_id = req.company.company_id;
 
     //fetch all applications applied to this company
     const query = `

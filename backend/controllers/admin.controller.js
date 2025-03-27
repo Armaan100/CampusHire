@@ -1,7 +1,7 @@
 const sendEmail = require("../libs/nodemailer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {db} = require("../db/db");
+const db = require("../db/db");
 
 //Register Admin
 module.exports.Register = async(req, res) => {
