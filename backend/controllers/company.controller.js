@@ -274,23 +274,24 @@ module.exports.ShortlistResume = async(req, res) => {
 //Send Coding Test
 module.exports.SendCodingTest = async(req, res) => {
   try{
-    const {roll_number, job_id, coding_test_link} = req.body;
+    const {title, year_of_passing, coding_test_link} = req.body;
 
-    // Validate coding_test_link
-    if (!coding_test_link) {
+    // Validate input
+    if (!title || !year_of_passing || !coding_test_link) {
       return res.status(400).json({
-          success: false,
-          message: 'Coding test link is required',
+        success: false,
+        message: "Title, year of passing, and coding test link are required",
       });
     }
 
     const query = `
-    UPDATE Application
-    SET coding_test_link = ?
-    WHERE roll_number = ? AND job_id = ? AND resume_status = ?
+    UPDATE Application A, Job J, Student S
+    SET A.coding_test_link = ?
+    WHERE A.roll_number = S.roll_number AND A.job_id = J.job_id
+    AND J.title = ? AND S.year_of_passing = ? AND A.resume_status = ?
     `;
 
-    db.query(query, [coding_test_link, roll_number, job_id, 'accepted'], (err, result) => {
+    db.query(query, [coding_test_link, title, year_of_passing, 'accepted'], (err, result) => {
       if(err){
         return res.status(500).json({
           success: false,
@@ -300,6 +301,7 @@ module.exports.SendCodingTest = async(req, res) => {
 
       res.status(200).json({
         success: true,
+        coding_test_link,
         message: "Coding test link sent successfully"
       })
     });
