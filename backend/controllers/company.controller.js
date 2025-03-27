@@ -70,16 +70,15 @@ module.exports.Register = async (req, res) => {
   }
 };
 
+
 //Login Company
 module.exports.Login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
     //check if student exists
-    db.query(
-      "SELECT * FROM company WHERE email = ?",
-      [email],
-      async (err, result) => {
+    const query = "SELECT * FROM company WHERE email = ?";
+    db.query(query, [email], async (err, result) => {
         if (err) {
           return res.status(500).json({
             success: false,
@@ -87,7 +86,7 @@ module.exports.Login = async (req, res) => {
           });
         }
 
-        //student does not exist
+        //company does not exist
         if (result.length === 0) {
           return res.status(400).json({
             success: false,
@@ -95,19 +94,21 @@ module.exports.Login = async (req, res) => {
           });
         }
 
-        //student exists
+        //company exists
         const isMatch = await bcrypt.compare(password, result[0].password);
         if (!isMatch) {
           return res.status(400).json({
             success: false,
-            message: "Invalid password",
+            message: "Incorrect password",
           });
         }
 
         //generate JWT token
-        const token = jwt.sign({ id: result[0].id }, process.env.JWT_SECRET, {
-          expiresIn: "1h",
-        });
+        const token = jwt.sign(
+          {id: result[0].company_id }, 
+          process.env.JWT_SECRET, 
+          { expiresIn: "1h"});
+
 
         //send the token to frontend
         res.cookie("token", token);
@@ -127,6 +128,7 @@ module.exports.Login = async (req, res) => {
   }
 };
 
+
 //Logout Company
 module.exports.Logout = async (req, res) => {
   try {
@@ -143,6 +145,8 @@ module.exports.Logout = async (req, res) => {
     });
   }
 };
+
+
 
 //Post a job (protected to Company)
 module.exports.PostJob = async (req, res) => {
@@ -192,7 +196,6 @@ module.exports.PostJob = async (req, res) => {
     });
   }
 };
-
 
 
 
