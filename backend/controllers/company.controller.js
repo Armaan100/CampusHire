@@ -271,10 +271,13 @@ module.exports.ShortlistResume = async(req, res) => {
 }
 
 
+//after shortlisting resumes, company will send coding test link to the students yo
+
 //Send Coding Test
 module.exports.SendCodingTest = async(req, res) => {
   try{
     const {title, year_of_passing, coding_test_link} = req.body;
+    const company_id = req.company.company_id;
 
     // Validate input
     if (!title || !year_of_passing || !coding_test_link) {
@@ -288,10 +291,10 @@ module.exports.SendCodingTest = async(req, res) => {
     UPDATE Application A, Job J, Student S
     SET A.coding_test_link = ?
     WHERE A.roll_number = S.roll_number AND A.job_id = J.job_id
-    AND J.title = ? AND S.year_of_passing = ? AND A.resume_status = ?
+    AND J.title = ? AND S.year_of_passing = ? AND A.resume_status = ? AND J.company_id = ?
     `;
 
-    db.query(query, [coding_test_link, title, year_of_passing, 'accepted'], (err, result) => {
+    db.query(query, [coding_test_link, title, year_of_passing, 'accepted', company_id], (err, result) => {
       if(err){
         return res.status(500).json({
           success: false,
@@ -314,21 +317,60 @@ module.exports.SendCodingTest = async(req, res) => {
 }
 
 
+//getApplicationsPhase2 <-> jaar jaar resume shortlist hol eheti fetch hobo
 module.exports.GetApplicationsPhase2 = async(req, res) => {
   try{
-    const company = req.company;
-    const company_id = company.id;
+    const company_id = req.company.company_id;
 
     //fetch all applications whose resume has been accepted to this company
     const query = `
     SELECT A.roll_number, A.job_id,
     J.title, J.description, 
-    S.name, S.email, S.resume
+    S.name, S.email, S.resume, S.year_of_passing, S.current_cgpa
     FROM application A, job J, student S
-    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.resume_status = 'Accepted'
+    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.resume_status = ?
     `;
 
-    db.query(query, [company_id], (err, result) => {
+    db.query(query, [company_id, 'accepted'], (err, result) => {
+      if(err){
+        return res.status(500).json({
+          success: false,
+          error: err.message
+        });
+      }
+
+      console.log(result);
+
+      return res.status(200).json({
+        success: true,
+        applications: result
+      })
+    });
+
+  }catch(err){
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
+  }
+}
+
+
+//GetApplicationsPhase3 <-> jaar jaar coding test accept hol eheti fetch hobo
+module.exports.GetApplicationsPhase3 = async(req, res) => {
+  try{
+    const company_id = company.company_id;
+
+    //fetch all applications whose coding test has been accepted to this company
+    const query = `
+    SELECT A.roll_number, A.job_id,
+    J.title, J.description, 
+    S.name, S.email, S.resume
+    FROM application A, job J, student S
+    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.coding_test_status = ?
+    `;
+
+    db.query(query, [company_id, 'accepted'], (err, result) => {
       if(err){
         return res.status(500).json({
           success: false,
@@ -349,6 +391,7 @@ module.exports.GetApplicationsPhase2 = async(req, res) => {
     });
   }
 }
+
 
 //Evaluate Coding Test
 module.exports.EvaluateCodingTest = async(req, res) => {
@@ -379,45 +422,6 @@ module.exports.EvaluateCodingTest = async(req, res) => {
       success: false,
       error: err.message
     })
-  }
-}
-
-
-
-//GetApplicationsPhase3
-module.exports.GetApplicationsPhase3 = async(req, res) => {
-  try{
-    const company = req.company;
-    const company_id = company.id;
-
-    //fetch all applications whose coding test has been accepted to this company
-    const query = `
-    SELECT A.roll_number, A.job_id,
-    J.title, J.description, 
-    S.name, S.email, S.resume
-    FROM application A, job J, student S
-    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.coding_test_status = 'accepted'
-    `;
-
-    db.query(query, [company_id], (err, result) => {
-      if(err){
-        return res.status(500).json({
-          success: false,
-          error: err.message
-        });
-      }
-
-      return res.status.json(200).json({
-        success: true,
-        applications: result
-      })
-    });
-
-  }catch(err){
-    res.status(500).json({
-      success: false,
-      error: err.message
-    });
   }
 }
 
