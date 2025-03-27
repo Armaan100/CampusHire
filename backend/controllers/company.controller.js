@@ -151,31 +151,27 @@ module.exports.Logout = async (req, res) => {
 //Post a job (protected to Company)
 module.exports.PostJob = async (req, res) => {
   try {
-    const {
-      title,
-      description,
-      eligibility_cgpa,
-      eligibility_year,
-      location,
-      type,
-      posted_date,
-      deadline,
-    } = req.body;
+    const {title, description, eligibility_cgpa, eligibility_year, salary, type, deadline} = req.body;
 
     //find the company_id from the token
     const company_id = req.company.id;
 
+    // const posted_date = new Date().toLocaleDateString("en-GB").split("/").reverse().join("-");
+    const posted_date = new Date().toISOString().split("T")[0];
+    
+    //check if deadline is greater than the posted_date or not
+    
     // Input validation
-    if (!title || !eligibility_cgpa || !eligibility_year || !location || !type || !posted_date || !deadline) {
+    if (!title || !eligibility_cgpa || !eligibility_year || !type || !posted_date || !deadline || !salary) {
         return res.status(400).json({
             success: false,
             message: 'All fields are required',
         });
     }
 
-    const insertQuery = "INSERT INTO job (company_id, title, description, eligibility_cgpa, eligibility_year, location, type, posted_date, deadline) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const query = "INSERT INTO job (company_id, title, description, eligibility_cgpa, eligibility_year, type, posted_date, deadline, salary) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    db.query(insertQuery, [company_id, title, description, eligibility_cgpa, eligibility_year, location, type, posted_date, deadline], (err, result) => {
+    db.query(query, [company_id, title, description, eligibility_cgpa, eligibility_year, type, posted_date, deadline, salary], (err, result) => {
         if (err) {
             return res.status(500).json({
                 success: false,
@@ -183,10 +179,13 @@ module.exports.PostJob = async (req, res) => {
             });
         }
 
+        const job_id = result.insertId;
+        console.log(job_id);
+
         res.status(201).json({
             success: true,
             message: 'FullTime/Internship posted successfully',
-            job_id: result.job_id,
+            job_id: job_id,
         });
     });
   } catch (err) {

@@ -13,7 +13,7 @@ router.post("/register", [
 ], companyController.Register);
 
 router.post("/login",[
-    body('rollno').isLength({min:8,max:15}).withMessage('Please enter a valid roll number'),
+    body('email').isEmail().withMessage('Please enter a valid roll number'),
     body('password').isLength({min:3}).withMessage('Password must be atleast 3 characters long')
 ],companyController.Login);
 
