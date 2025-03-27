@@ -1,21 +1,19 @@
 const sendEmail = require("../libs/nodemailer");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { db } = require("../db/db");
+const db = require("../db/db");
 
 //Register Company
 module.exports.Register = async (req, res) => {
   console.log(req.body);
 
   try {
-    const { name, email, phone, password, city, state, country, website } =
-      req.body;
+    const { name, email, phone, password, city, state, website } = req.body;
+    console.log(req.body);
 
     //check if email already exists
-    db.query(
-      "SELECT * FROM company WHERE email = ?",
-      [email],
-      async (err, result) => {
+    const query = "SELECT * FROM company WHERE email = ?";
+    db.query(query, [email], async (err, result) => {
         if (err) {
           return res.status(500).json({
             success: false,
@@ -35,22 +33,19 @@ module.exports.Register = async (req, res) => {
         let hashedPassword = await bcrypt.hash(password, 10); //hash the password
 
         //insert the admin into the database
-        const insertQuery =
-          "INSERT INTO company (name, email, password, phone, city, state, country, website) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        db.query(
-          insertQuery,
-          [name, email, hashedPassword, phone, city, state, country, website],
-          (err, result) => {
+        const query = "INSERT INTO company (name, email, password, phone, city, state, website) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        db.query(query, [name, email, hashedPassword, phone, city, state, website], async (err, result) => {
             if (err) {
               return res.status(500).json({
                 success: false,
                 error: err.message,
               });
             }
-
+            
+            console.log(result.insertId);
             //generate JWT token
             const token = jwt.sign(
-              { id: result[0].id },
+              { id: result.insertId },
               process.env.JWT_SECRET,
               { expiresIn: "1h" }
             );
