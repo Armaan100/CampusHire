@@ -237,7 +237,7 @@ module.exports.GetApplications = async(req, res) => {
 }
 
 
-
+//left to do -> if the resumeStatus === false then, make overall_status -> false too
 //ShortlistResume
 module.exports.ShortlistResume = async(req, res) => {
   try{
@@ -317,7 +317,7 @@ module.exports.SendCodingTest = async(req, res) => {
 }
 
 
-//getApplicationsPhase2 <-> jaar jaar resume shortlist hol eheti fetch hobo
+//getApplicationsPhase2 <-> jaar jaar resume shortlist hol and they had given the test eheti fetch hobo
 module.exports.GetApplicationsPhase2 = async(req, res) => {
   try{
     const company_id = req.company.company_id;
@@ -355,49 +355,15 @@ module.exports.GetApplicationsPhase2 = async(req, res) => {
   }
 }
 
-
-//GetApplicationsPhase3 <-> jaar jaar coding test accept hol eheti fetch hobo
-module.exports.GetApplicationsPhase3 = async(req, res) => {
-  try{
-    const company_id = company.company_id;
-
-    //fetch all applications whose coding test has been accepted to this company
-    const query = `
-    SELECT A.roll_number, A.job_id,
-    J.title, J.description, 
-    S.name, S.email, S.resume
-    FROM application A, job J, student S
-    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.coding_test_status = ?
-    `;
-
-    db.query(query, [company_id, 'accepted'], (err, result) => {
-      if(err){
-        return res.status(500).json({
-          success: false,
-          error: err.message
-        });
-      }
-
-      return res.status.json(200).json({
-        success: true,
-        applications: result
-      })
-    });
-
-  }catch(err){
-    res.status(500).json({
-      success: false,
-      error: err.message
-    });
-  }
-}
-
-
+//left to do -> if the coding_test_status === false then, make overall_status -> false too
 //Evaluate Coding Test
 module.exports.EvaluateCodingTest = async(req, res) => {
   try{
-    const {roll_number, job_id, coding_test_status} = req.body;
+    const {roll_number, job_id, coding_test_status} = req.body;   //coding test status tu company r uporot, -> jodi accept button click taar uport -> ('accepted', 'rejected') 
     
+    // iyat company_id r hisape update aplication nelage 
+    // cuz, update from frontend koribo and frontend t moi pothaisu only those applications who belongs to that company so, the company will only be visible with hihotor applications
+
     const query = `
     UPDATE Application
     SET coding_test_status = ?
@@ -422,6 +388,43 @@ module.exports.EvaluateCodingTest = async(req, res) => {
       success: false,
       error: err.message
     })
+  }
+}
+
+
+//GetApplicationsPhase3 <-> jaar jaar coding test accept hol eheti fetch hobo
+module.exports.GetApplicationsPhase3 = async(req, res) => {
+  try{
+    const company_id = req.company.company_id;
+
+    //fetch all applications whose coding test has been accepted to this company
+    const query = `
+    SELECT A.roll_number, A.job_id,
+    J.title, J.description, 
+    S.name, S.email, S.resume
+    FROM application A, job J, student S
+    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.coding_test_status = ?
+    `;
+
+    db.query(query, [company_id, 'accepted'], (err, result) => {
+      if(err){
+        return res.status(500).json({
+          success: false,
+          error: err.message
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        applications: result
+      })
+    });
+
+  }catch(err){
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
   }
 }
 
