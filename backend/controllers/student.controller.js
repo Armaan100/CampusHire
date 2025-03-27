@@ -228,7 +228,6 @@ module.exports.UploadResume = async (req, res) => {
   }
 };
 
-//Till Here Done Testing✅
 
 //getJobs
 module.exports.GetFullTime = async (req, res) => {
@@ -350,6 +349,7 @@ module.exports.ApplyJob = async (req, res) => {
   }
 };
 
+//Till Here Done Testing✅
 
 
 //submitCodingTest

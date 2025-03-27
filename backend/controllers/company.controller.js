@@ -203,12 +203,13 @@ module.exports.PostJob = async (req, res) => {
 module.exports.GetApplications = async(req, res) => {
   try{
     const company_id = req.company.company_id;
+    console.log(req.company);
 
     //fetch all applications applied to this company
     const query = `
     SELECT A.roll_number, A.job_id,
     J.title, J.description, 
-    S.name, S.email, S.resume
+    S.name, S.email, S.resume, S.year_of_passing, S.current_cgpa
     FROM application A, job J, student S
     WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ?
     `;
@@ -221,7 +222,7 @@ module.exports.GetApplications = async(req, res) => {
         });
       }
 
-      return res.status.json(200).json({
+      return res.status(200).json({
         success: true,
         applications: result
       })
@@ -240,7 +241,7 @@ module.exports.GetApplications = async(req, res) => {
 //ShortlistResume
 module.exports.ShortlistResume = async(req, res) => {
   try{
-    const {roll_number, job_id, resume_status} = req.body;
+    const {roll_number, job_id, resume_status} = req.body;  //resume status tu company r uporot jodi accept button click taar uport -> ('accepted', 'rejected') 
     
     const query = `
     UPDATE Application
@@ -286,10 +287,10 @@ module.exports.SendCodingTest = async(req, res) => {
     const query = `
     UPDATE Application
     SET coding_test_link = ?
-    WHERE roll_number = ? AND job_id = ?
+    WHERE roll_number = ? AND job_id = ? AND resume_status = ?
     `;
 
-    db.query(query, [coding_test_link, roll_number, job_id], (err, result) => {
+    db.query(query, [coding_test_link, roll_number, job_id, 'accepted'], (err, result) => {
       if(err){
         return res.status(500).json({
           success: false,
