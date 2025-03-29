@@ -45,7 +45,7 @@ const StudentRegister = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -89,13 +89,16 @@ const StudentRegister = () => {
             {/* Left side - decorative */}
             <div className="md:w-1/3 bg-gradient-to-b from-indigo-600 to-purple-600 p-8 flex flex-col justify-center">
               <div className="text-center">
-                <h2 className="text-3xl font-bold text-white mb-2">Campus Hire</h2>
+                <h2 className="text-3xl font-bold text-white mb-2">
+                  Campus Hire
+                </h2>
                 <p className="text-white/90 mt-4">
-                  Join our platform to connect with top companies and kickstart your career.
+                  Join our platform to connect with top companies and kickstart
+                  your career.
                 </p>
                 <div className="mt-8">
-                  <Link 
-                    to="/student-login" 
+                  <Link
+                    to="/student-login"
                     className="text-yellow-300 hover:text-yellow-200 font-medium"
                   >
                     Already have an account? Login here
@@ -103,12 +106,16 @@ const StudentRegister = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Right side - form */}
             <div className="md:w-2/3 p-8">
               <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">Create New Account</h1>
-                <p className="mt-2 text-gray-600">Please fill in your details for registration</p>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  Create New Account
+                </h1>
+                <p className="mt-2 text-gray-600">
+                  Please fill in your details for registration
+                </p>
               </div>
 
               {errMessage && (
@@ -121,7 +128,7 @@ const StudentRegister = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <input
-                      type="text"
+                      type="number"
                       name="roll_number"
                       placeholder="Roll Number"
                       value={formData.roll_number}
@@ -266,35 +273,35 @@ const StudentRegister = () => {
                     type="submit"
                     disabled={isLoading}
                     className={`w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl hover:from-purple-700 hover:to-indigo-700 ${
-                      isLoading ? 'opacity-75 cursor-not-allowed' : ''
+                      isLoading ? "opacity-75 cursor-not-allowed" : ""
                     }`}
                   >
                     {isLoading ? (
                       <div className="flex items-center justify-center gap-2">
-                        <svg 
-                          className="animate-spin h-5 w-5 text-white" 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          fill="none" 
+                        <svg
+                          className="animate-spin h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
                           viewBox="0 0 24 24"
                         >
-                          <circle 
-                            className="opacity-25" 
-                            cx="12" 
-                            cy="12" 
-                            r="10" 
-                            stroke="currentColor" 
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
                             strokeWidth="4"
                           ></circle>
-                          <path 
-                            className="opacity-75" 
-                            fill="currentColor" 
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                           ></path>
                         </svg>
                         Processing...
                       </div>
                     ) : (
-                      'Register Now'
+                      "Register"
                     )}
                   </button>
                 </div>
