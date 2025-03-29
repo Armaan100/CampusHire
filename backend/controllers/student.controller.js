@@ -12,7 +12,7 @@ module.exports.Register = async (req, res) => {
 
   try {
     const {
-      rollNumber,
+      roll_number,
       name,
       password,
       city,
@@ -65,7 +65,7 @@ module.exports.Register = async (req, res) => {
         db.query(
           query,
           [
-            rollNumber,
+            roll_number,
             name,
             hashedPassword,
             city,
@@ -87,7 +87,7 @@ module.exports.Register = async (req, res) => {
             }
 
             //generate JWT token
-            const token = jwt.sign({ id: rollNumber }, process.env.JWT_SECRET, {
+            const token = jwt.sign({ id: roll_number }, process.env.JWT_SECRET, {
               expiresIn: "1h",
             });
 
@@ -115,12 +115,12 @@ module.exports.Register = async (req, res) => {
 //Login Student
 module.exports.Login = async (req, res) => {
   try {
-    const { rollNumber, password } = req.body;
+    const { roll_number, password } = req.body;
 
     //check if student exists
     db.query(
       "SELECT * FROM student WHERE roll_number = ?",
-      [rollNumber],
+      [roll_number],
       async (err, result) => {
         if (err) {
           return res.status(500).json({
@@ -147,7 +147,7 @@ module.exports.Login = async (req, res) => {
         }
 
         //generate JWT token
-        const token = jwt.sign({ id: rollNumber }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ id: roll_number }, process.env.JWT_SECRET, {
           expiresIn: "1h",
         });
 
@@ -190,11 +190,11 @@ module.exports.Logout = async (req, res) => {
 //Profile Student
 module.exports.Profile = async (req, res) => {
   try {
-    const rollNumber = req.student.roll_number;
+    const roll_number = req.student.roll_number;
 
     db.query(
       "SELECT * FROM student WHERE roll_number = ?",
-      [rollNumber],
+      [roll_number],
       (err, result) => {
         if (err) {
           return res.status(500).json({
@@ -244,13 +244,13 @@ module.exports.UploadResume = async (req, res) => {
     }
 
     // File uploaded
-    const rollNumber = req.student.roll_number;
+    const roll_number = req.student.roll_number;
     const resumePath = req.file.path;
     console.log(resumePath);
 
     db.query(
       "UPDATE student SET resume = ? WHERE roll_number = ?",
-      [resumePath, rollNumber],
+      [resumePath, roll_number],
       (err, result) => {
         if (err) {
           return res.status(500).json({
@@ -347,11 +347,11 @@ module.exports.GetInternships = async (req, res) => {
 module.exports.ApplyJob = async (req, res) => {
   try {
     const { job_id } = req.body;
-    const rollNumber = req.student.roll_number;
+    const roll_number = req.student.roll_number;
 
     //check if the student has already applied for the job
     query = "SELECT * FROM Application WHERE job_id = ? AND roll_number = ?";
-    db.query(query, [job_id, rollNumber], (err, result) => {
+    db.query(query, [job_id, roll_number], (err, result) => {
       if (err) {
         return res.status(500).json({
           success: false,
@@ -370,7 +370,7 @@ module.exports.ApplyJob = async (req, res) => {
       //apply for the job
       const query =
         "INSERT INTO Application (job_id, roll_number, overall_status) VALUES (?, ?, ?)";
-      db.query(query, [job_id, rollNumber, "Applied"], (err, result) => {
+      db.query(query, [job_id, roll_number, "Applied"], (err, result) => {
         if (err) {
           return res.status(500).json({
             success: false,
@@ -381,7 +381,7 @@ module.exports.ApplyJob = async (req, res) => {
         res.status(200).json({
           success: true,
           message: "Job applied successfully",
-          rollNumber: rollNumber,
+          roll_number: roll_number,
           job_id: job_id,
         });
       });
@@ -401,38 +401,52 @@ module.exports.ApplyJob = async (req, res) => {
 module.exports.SubmitCodingTest = async (req, res) => {
   try {
     const { job_id } = req.body;
-    const rollNumber = req.student.roll_number;
+    const roll_number = req.student.roll_number;
 
     //check if the student has applied for the job
-    const [existingApplication] = await db.execute(
-      "SELECT * FROM Application WHERE job_id = ? AND roll_number = ?",
-      [job_id, rollNumber]
-    );
+    const query = `SELECT * FROM Application WHERE job_id = ? AND roll_number = ?`;
+    db.query(query, [job_id, roll_number], (err, result) => {
 
-    if (existingApplication.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: "You have not applied for the job",
-      });
-    }
+      if(err) {
+        return res.status(500).json({
+          success: false,
+          error: err.message,
+        });
+      }
 
-    //check if the student has already submitted the coding test
-    const [existingCodingTestSubmission] = await db.execute(
-      "SELECT * FROM Application WHERE job_id = ? AND roll_number = ? AND coding_test_completed=?",
-      [job_id, rollNumber, 1]
-    );
-    if (existingCodingTestSubmission.length > 0) {
-      return res.status(400).json({
-        success: false,
-        message: "You have already submitted the coding test",
-      });
-    }
+      //student has already applied for the job
+      if (result.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: "You have already applied for the job",
+        });
+      }
+
+      //student has already applied for the job
+      const query = `SELECT * FROM Application WHERE job_id = ? AND roll_number = ? AND coding_test_completed=?`;
+      db.query(query, [job_id, roll_number, 1], (err, result) => {
+        if(err) {
+          return res.status(500).json({
+            success: false,
+            error: err.message,
+          });
+        }
+
+        //student has already submitted the coding test
+        if (result.length > 0) {
+          return res.status(400).json({
+            success: false,
+            message: "You have already submitted the coding test",
+          });
+        }
+      })
+    });
+    
 
     //submit the coding test
-    const query =
-      "INSERT INTO Application (job_id, roll_number, coding_test_completed) VALUES (?, ?, ?)";
+    const updateQuery ="UPDATE application SET coding_test_completed = ? WHERE job_id = ? AND roll_number = ?";
 
-    db.query(query, [job_id, roll_number, 1], (err, result) => {
+    db.query(updateQuery, [1, job_id, roll_number], (err, result) => {
       if (err) {
         return res.status(500).json({
           success: false,
@@ -458,11 +472,11 @@ module.exports.SubmitCodingTest = async (req, res) => {
 //getProfile
 module.exports.GetProfile = async (req, res) => {
   try {
-    const roll_number = req.student.rollNumber;
+    const roll_number = req.student.roll_number;
 
     const [result] = await db.query(
       `SELECT roll_number, name, email, phone, city, state, branch, semester, year_of_passing, currentCGPA FROM student WHERE roll_number = ?`,
-      [rollNumber]
+      [roll_number]
     );
 
     if (result.length === 0) {
@@ -488,7 +502,7 @@ module.exports.GetProfile = async (req, res) => {
 //getAppliedJobs
 module.exports.GetAppliedJobs = async (req, res) => {
   try{
-    const rollNumber = req.student.roll_number;
+    const roll_number = req.student.roll_number;
     const query = `
       SELECT A.job_id, J.title AS job_title, J.type AS job_type, C.name AS company_name
       FROM Application A
@@ -497,7 +511,7 @@ module.exports.GetAppliedJobs = async (req, res) => {
       WHERE A.roll_number = ?
     `;
 
-    db.query(query, [rollNumber], (err, result) => {
+    db.query(query, [roll_number], (err, result) => {
       if (err) {
         return res.status(500).json({
           success: false,
