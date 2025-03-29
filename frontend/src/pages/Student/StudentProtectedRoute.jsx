@@ -10,7 +10,7 @@ const StudentProtectedRoute = ({ children }) => {
 
     useEffect(() => {
         if(!token){
-            navigate("/login");
+            navigate("/student-login");
             return;
         }
 
@@ -28,7 +28,7 @@ const StudentProtectedRoute = ({ children }) => {
             }catch(err){
                 console.log("Error: ", err);
                 localStorage.removeItem("token");
-                navigate("/login");
+                navigate("/student-login");
             }
         }
 

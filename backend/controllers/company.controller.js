@@ -147,6 +147,45 @@ module.exports.Logout = async (req, res) => {
 };
 
 
+//Get Company Profile
+module.exports.Profile = async (req, res) => {
+  try {
+    const company_id = req.company.company_id;
+    console.log(company_id);
+
+    const query = "SELECT * FROM company WHERE company_id = ?";
+    db.query(query, [company_id], (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          error: err.message,
+        });
+      }
+
+      if (result.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Company not found",
+        });
+      }
+
+      //remove password from the result
+      const { password, ...company } = result[0];
+      console.log(company);
+      res.status(200).json({
+        success: true,
+        company,
+      });
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+};
+
+
 
 //Post a job (protected to Company)
 module.exports.PostJob = async (req, res) => {

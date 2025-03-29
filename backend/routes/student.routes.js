@@ -24,6 +24,8 @@ router.post("/login",[
 
 router.get("/logout", authStudent, studentController.Logout);
 
+router.get("/profile", authStudent, studentController.Profile);
+
 router.post("/upload-resume", authStudent, upload.single('resume'), studentController.UploadResume);
 
 router.get("/get-full-time", authStudent, studentController.GetFullTime);

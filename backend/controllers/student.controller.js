@@ -185,6 +185,50 @@ module.exports.Logout = async (req, res) => {
   }
 };
 
+
+//Profile Student
+module.exports.Profile = async (req, res) => {
+  try {
+    const rollNumber = req.student.roll_number;
+
+    db.query(
+      "SELECT * FROM student WHERE roll_number = ?",
+      [rollNumber],
+      (err, result) => {
+        if (err) {
+          return res.status(500).json({
+            success: false,
+            error: err.message,
+          });
+        }
+
+        //student does not exist
+        if (result.length === 0) {
+          return res.status(400).json({
+            success: false,
+            message: "Student not found",
+          });
+        }
+
+        //remove password from the result
+        result[0].password = undefined;
+
+        //student exists
+        res.status(200).json({
+          success: true,
+          student: result[0],
+        });
+      }
+    );
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+}
+
+
 //UploadResume
 module.exports.UploadResume = async (req, res) => {
   try {
