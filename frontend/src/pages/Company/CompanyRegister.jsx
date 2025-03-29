@@ -247,3 +247,6 @@ const CompanyRegister = () => {
     </div>
   );
 };
+
+
+export default CompanyRegister;

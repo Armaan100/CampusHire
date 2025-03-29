@@ -1,9 +1,9 @@
 import './App.css'
 import { Route, Routes } from 'react-router-dom';
 import HomePage from './pages/Home/HomePage';
-import StudentProtectedRoute from './pages/Student/StudentProtectedRoute';
-import CompanyProtectedRoute from './pages/Company/CompanyProtectedRoute';
-import AdminProtectedRoute from './pages/Admin/AdminProtectedRoute';
+// import StudentProtectedRoute from './pages/Student/StudentProtectedRoute';
+// import CompanyProtectedRoute from './pages/Company/CompanyProtectedRoute';
+// import AdminProtectedRoute from './pages/Admin/AdminProtectedRoute';
 import StudentLogin from './pages/Student/StudentLogin';
 import StudentRegister from './pages/Student/StudentRegister';
 import CompanyLogin from './pages/Company/CompanyLogin';

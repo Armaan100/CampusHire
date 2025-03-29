@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+ 
 const Hero = () => {
     return (
       <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 py-20 sm:py-28 lg:py-36 relative overflow-hidden">
@@ -24,12 +26,12 @@ const Hero = () => {
             
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-3 bg-white text-indigo-700 font-medium rounded-lg hover:bg-gray-100 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              <Link to="/student-login" className="px-8 py-3 bg-white text-indigo-700 font-medium rounded-lg hover:bg-gray-100 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                 For Students
-              </button>
-              <button className="px-8 py-3 bg-indigo-800 text-white font-medium rounded-lg hover:bg-indigo-900 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 border border-white/20">
+              </Link>
+              <Link to="/company-login" className="px-8 py-3 bg-indigo-800 text-white font-medium rounded-lg hover:bg-indigo-900 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 border border-white/20">
                 For Companies
-              </button>
+              </Link>
             </div>
           </div>
         </div>

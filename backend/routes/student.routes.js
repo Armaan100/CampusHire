@@ -38,6 +38,8 @@ router.post("/submit-coding-test", authStudent, studentController.SubmitCodingTe
 
 router.get("/profile", authStudent, studentController.GetProfile);
 
+router.get("/get-applied-jobs", authStudent, studentController.GetAppliedJobs); //to be done
+
 router.get("/get-application-details/:job_id", authStudent, studentController.GetApplicationDetails);  //to be done
 
 module.exports = router;

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const db = require("../db/db");
 const path = require("path");
 const fs = require("fs");
+const { query } = require("express-validator");
 
 //Register Student
 module.exports.Register = async (req, res) => {
@@ -43,7 +44,7 @@ module.exports.Register = async (req, res) => {
         if (err) {
           return res.status(500).json({
             success: false,
-            error: err.message,
+            err: err.message,
           });
         }
 
@@ -400,7 +401,7 @@ module.exports.ApplyJob = async (req, res) => {
 module.exports.SubmitCodingTest = async (req, res) => {
   try {
     const { job_id } = req.body;
-    const rollNumber = req.student.rollNumber;
+    const rollNumber = req.student.roll_number;
 
     //check if the student has applied for the job
     const [existingApplication] = await db.execute(
@@ -431,7 +432,7 @@ module.exports.SubmitCodingTest = async (req, res) => {
     const query =
       "INSERT INTO Application (job_id, roll_number, coding_test_completed) VALUES (?, ?, ?)";
 
-    db.query(query, [job_id, rollNumber, 1], (err, result) => {
+    db.query(query, [job_id, roll_number, 1], (err, result) => {
       if (err) {
         return res.status(500).json({
           success: false,
@@ -442,7 +443,7 @@ module.exports.SubmitCodingTest = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "Coding test submitted successfully",
-        rollNumber: rollNumber,
+        roll_number: roll_number,
         job_id: job_id,
       });
     });
@@ -457,7 +458,7 @@ module.exports.SubmitCodingTest = async (req, res) => {
 //getProfile
 module.exports.GetProfile = async (req, res) => {
   try {
-    const rollNumber = req.student.rollNumber;
+    const roll_number = req.student.rollNumber;
 
     const [result] = await db.query(
       `SELECT roll_number, name, email, phone, city, state, branch, semester, year_of_passing, currentCGPA FROM student WHERE roll_number = ?`,
@@ -483,14 +484,59 @@ module.exports.GetProfile = async (req, res) => {
   }
 };
 
+
+//getAppliedJobs
+module.exports.GetAppliedJobs = async (req, res) => {
+  try{
+    const rollNumber = req.student.roll_number;
+    const query = `
+      SELECT A.job_id, J.title AS job_title, J.type AS job_type, C.name AS company_name
+      FROM Application A
+      JOIN Job J ON A.job_id = J.job_id
+      JOIN Company C ON J.company_id = C.company_id
+      WHERE A.roll_number = ?
+    `;
+
+    db.query(query, [rollNumber], (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          error: err.message,
+        });
+      }
+
+      // Check if the student has applied for any jobs
+      if (result.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "No applied jobs found",
+        });
+      }
+
+      // Return the list of applied jobs
+      return res.status(200).json({
+        success: true,
+        appliedJobs: result,
+      });
+    });
+  }catch(err){
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+}
+
+
+
 //getApplication
 module.exports.GetApplicationDetails = async (req, res) => {
   try {
-    const { roll_number } = req.student;
+    const roll_number = req.student.roll_number;
     const { job_id } = req.params;
-
-    const [result] = await db.query(
-      `
+    console.log(roll_number, job_id);
+    
+    const query = `
         SELECT 
         A.job_id,
         J.title AS job_title,
@@ -501,22 +547,42 @@ module.exports.GetApplicationDetails = async (req, res) => {
         A.interview_status,
         A.overall_status,
         A.coding_test_link,
-        A.interview_time,
-        A.interview_venue,
-        FROM application A, job B, company C
+        A.interview_date_time,
+        A.interview_venue
+        FROM application A, job J, company C
         WHERE A.job_id = J.job_id
         AND J.company_id = C.company_id
         AND A.roll_number = ?
         AND A.job_id = ?
-      `,
-      [roll_number, job_id]
-    );
+      `;
+      
+    db.query(query, [roll_number, job_id], (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          error: err.message,
+        });
+      }
 
-    res.status(200).json({
-      success: true,
-      application: result[0],
+      // Check if the application exists
+      if (result.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Application not found",
+        });
+      }
+
+      // Return the application details
+      return res.status(200).json({
+        success: true,
+        application: result[0],
+      });
     });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch applications" });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch application details",
+      error: err.message,
+    });
   }
 };
