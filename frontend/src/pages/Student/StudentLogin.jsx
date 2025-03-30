@@ -27,6 +27,7 @@ const StudentLogin = () => {
         "http://localhost:5000/student/login",
         student
       );
+      console.log("Response: ", response.data);
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
         navigate("/student");

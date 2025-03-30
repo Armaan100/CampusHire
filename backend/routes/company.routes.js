@@ -19,7 +19,7 @@ router.post("/login",[
 
 router.get("/logout", authCompany, companyController.Logout);
 
-router.get("/profile", authCompany, companyController.Profile);
+router.get("/get-profile", authCompany, companyController.GetProfile);
 
 router.post("/post-job", authCompany, companyController.PostJob);
 

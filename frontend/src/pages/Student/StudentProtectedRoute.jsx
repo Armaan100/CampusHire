@@ -16,19 +16,21 @@ const StudentProtectedRoute = ({ children }) => {
 
         const verifyStudent = async () => {
             try{
-                const response = await axios.get("http://localhost:5000/student/profile", {
+                const response = await axios.get("http://localhost:5000/student/get-profile", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
 
-                if(response.status === 200){
+                if(response.status !== 200){
                     throw new Error("Unauthorized");
                 }
             }catch(err){
                 console.log("Error: ", err);
                 localStorage.removeItem("token");
                 navigate("/student-login");
+            }finally{
+                setIsLoading(false);
             }
         }
 

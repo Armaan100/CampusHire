@@ -129,6 +129,8 @@ module.exports.Login = async (req, res) => {
           });
         }
 
+        console.log(result);
+
         //student does not exist
         if (result.length === 0) {
           return res.status(400).json({
@@ -188,7 +190,7 @@ module.exports.Logout = async (req, res) => {
 
 
 //Profile Student
-module.exports.Profile = async (req, res) => {
+module.exports.GetProfile = async (req, res) => {
   try {
     const roll_number = req.student.roll_number;
 
@@ -343,6 +345,46 @@ module.exports.GetInternships = async (req, res) => {
   }
 };
 
+
+//getJobDetails
+module.exports.GetJobDetails = async (req, res) => {
+  const job_id = req.params.job_id;
+  const roll_number = req.student.roll_number;
+  console.log(roll_number, job_id);
+
+  try{
+    const query = `SELECT * from job WHERE job_id = ?`;
+    db.query(query, [job_id], (err, result) => {
+      if(err){
+        return res.status(500).json({
+          success: false,
+          error: err.message,
+        });
+      }
+
+      //job does not exist
+      if(result.length === 0){
+        return res.status(404).json({
+          success: false,
+          message: "Job not found",
+        });
+      }
+
+      //job exists
+      return res.status(200).json({
+        success: true,
+        job: result[0],
+      });
+    });
+  }catch(err){
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+}
+
+
 //applyJob
 module.exports.ApplyJob = async (req, res) => {
   try {
@@ -473,11 +515,12 @@ module.exports.SubmitCodingTest = async (req, res) => {
 
 
 //getProfile
+/*
 module.exports.GetProfile = async (req, res) => {
   try {
     const roll_number = req.student.roll_number;
 
-    const query = `SELECT roll_number, name, email, phone, city, state, branch, semester, year_of_passing, currentCGPA FROM student WHERE roll_number = ?`;
+    const query = `SELECT roll_number, name, email, phone, city, state, branch, semester, year_of_passing, current_cgpa, resume FROM student WHERE roll_number = ?`;
     db.query(query, [roll_number], (err, result) => {
       if(err){
         return res.status(500).json({
@@ -507,6 +550,7 @@ module.exports.GetProfile = async (req, res) => {
     });
   }
 };
+*/
 
 
 //getAppliedJobs

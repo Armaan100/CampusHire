@@ -148,7 +148,7 @@ module.exports.Logout = async (req, res) => {
 
 
 //Get Company Profile
-module.exports.Profile = async (req, res) => {
+module.exports.GetProfile = async (req, res) => {
   try {
     const company_id = req.company.company_id;
     console.log(company_id);
@@ -174,7 +174,7 @@ module.exports.Profile = async (req, res) => {
       console.log(company);
       res.status(200).json({
         success: true,
-        company,
+        company: company,
       });
     });
   } catch (err) {
