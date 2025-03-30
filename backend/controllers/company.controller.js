@@ -316,14 +316,14 @@ module.exports.ShortlistResume = async(req, res) => {
 //Send Coding Test
 module.exports.SendCodingTest = async(req, res) => {
   try{
-    const {title, year_of_passing, coding_test_link} = req.body;
+    const {job_id, coding_test_link} = req.body;
     const company_id = req.company.company_id;
 
     // Validate input
-    if (!title || !year_of_passing || !coding_test_link) {
+    if (!job_id || !coding_test_link) {
       return res.status(400).json({
         success: false,
-        message: "Title, year of passing, and coding test link are required",
+        message: "job_id and coding test link are required",
       });
     }
 
@@ -331,10 +331,10 @@ module.exports.SendCodingTest = async(req, res) => {
     UPDATE Application A, Job J, Student S
     SET A.coding_test_link = ?
     WHERE A.roll_number = S.roll_number AND A.job_id = J.job_id
-    AND J.title = ? AND S.year_of_passing = ? AND A.resume_status = ? AND J.company_id = ?
+    AND A.job_id = ? AND A.resume_status = ? AND J.company_id = ?
     `;
 
-    db.query(query, [coding_test_link, title, year_of_passing, 'accepted', company_id], (err, result) => {
+    db.query(query, [coding_test_link, job_id, 'accepted', company_id], (err, result) => {
       if(err){
         return res.status(500).json({
           success: false,
@@ -363,9 +363,9 @@ module.exports.GetApplicationsPhase2 = async(req, res) => {
     const company_id = req.company.company_id;
     const {job_id} = req.params;
 
-    //fetch all applications whose resume has been accepted to this company
+    //fetch all applications whose resume has been accepted to this company for this particular job
     const query = `
-    SELECT A.roll_number, A.job_id,
+    SELECT A.roll_number, A.job_id, A.coding_username
     J.title, J.description, 
     S.name, S.email, S.resume, S.year_of_passing, S.current_cgpa
     FROM application A, job J, student S

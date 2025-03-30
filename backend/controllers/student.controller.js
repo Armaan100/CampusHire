@@ -399,7 +399,7 @@ module.exports.ApplyJob = async (req, res) => {
 //submitCodingTest
 module.exports.SubmitCodingTest = async (req, res) => {
   try {
-    const { job_id } = req.body;
+    const { job_id, coding_username } = req.body;
     const roll_number = req.student.roll_number;
 
     //check if the student has applied for the job
@@ -443,9 +443,9 @@ module.exports.SubmitCodingTest = async (req, res) => {
     
 
     //submit the coding test
-    const updateQuery ="UPDATE application SET coding_test_completed = ? WHERE job_id = ? AND roll_number = ?";
+    const updateQuery ="UPDATE application SET coding_test_completed = ?, coding_username = ? WHERE job_id = ? AND roll_number = ?";
 
-    db.query(updateQuery, [1, job_id, roll_number], (err, result) => {
+    db.query(updateQuery, [1, coding_username, job_id, roll_number], (err, result) => {
       if (err) {
         return res.status(500).json({
           success: false,
