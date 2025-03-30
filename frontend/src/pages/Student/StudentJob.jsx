@@ -92,7 +92,7 @@ const StudentJob = () => {
             </div>
           ) : jobs.length === 0 ? (
             <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
-              No {activeTab === 'internships' ? 'internships' : 'full-time jobs'} available at the moment.
+              No {activeTab === 'internships' ? 'internships' : 'full-time jobs'} found.
             </div>
           ) : (
             <div className="space-y-4">

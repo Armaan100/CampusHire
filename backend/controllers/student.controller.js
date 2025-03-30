@@ -281,8 +281,7 @@ module.exports.GetFullTime = async (req, res) => {
   try {
     const student = req.student;
 
-    const query =
-      "SELECT * FROM Job WHERE eligibility_year = ? AND eligibility_cgpa <= ? AND type='FullTime'";
+    const query = `SELECT J.*, C.name FROM Job J, Company C WHERE J.company_id = C.company_id AND eligibility_year = ? AND eligibility_cgpa <= ? AND type='FullTime'`;
 
     db.query(
       query,
@@ -315,8 +314,7 @@ module.exports.GetInternships = async (req, res) => {
     const student = req.student;
     console.log(req.student);
 
-    const query =
-      "SELECT * FROM Job WHERE eligibility_year = ? AND eligibility_cgpa <= ? AND type='Internship'";
+    const query = `SELECT J.*, C.name FROM Job J, Company C WHERE J.company_id = C.company_id AND eligibility_year = ? AND eligibility_cgpa <= ? AND type='Internship'`;
 
     db.query(
       query,
@@ -353,7 +351,7 @@ module.exports.GetJobDetails = async (req, res) => {
   console.log(roll_number, job_id);
 
   try{
-    const query = `SELECT * from job WHERE job_id = ?`;
+    const query = `SELECT J.*, C.* from job J, Company C WHERE J.company_id = C.company_id AND job_id = ?`;
     db.query(query, [job_id], (err, result) => {
       if(err){
         return res.status(500).json({
