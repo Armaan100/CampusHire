@@ -29,11 +29,11 @@ router.put("/shortlist-resume", authCompany, companyController.ShortlistResume);
 
 router.put("/send-coding-test", authCompany, companyController.SendCodingTest);
 
-router.get("/get-applications-phase2", authCompany, companyController.GetApplicationsPhase2);
+router.get("/get-applications-phase2/:job_id", authCompany, companyController.GetApplicationsPhase2);
 
 router.put("/evaluate-coding-test", authCompany, companyController.EvaluateCodingTest);
 
-router.get("/get-applications-phase3", authCompany, companyController.GetApplicationsPhase3);
+router.get("/get-applications-phase3/:job_id", authCompany, companyController.GetApplicationsPhase3);
 
 router.put("/schedule-interview", authCompany, companyController.ScheduleInterview); 
 
