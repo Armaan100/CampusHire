@@ -394,7 +394,6 @@ module.exports.ApplyJob = async (req, res) => {
   }
 };
 
-//Till Here Done Testing✅
 
 
 //submitCodingTest
@@ -469,26 +468,37 @@ module.exports.SubmitCodingTest = async (req, res) => {
   }
 };
 
+
+//Till Here Done Testing✅
+
+
 //getProfile
 module.exports.GetProfile = async (req, res) => {
   try {
     const roll_number = req.student.roll_number;
 
-    const [result] = await db.query(
-      `SELECT roll_number, name, email, phone, city, state, branch, semester, year_of_passing, currentCGPA FROM student WHERE roll_number = ?`,
-      [roll_number]
-    );
+    const query = `SELECT roll_number, name, email, phone, city, state, branch, semester, year_of_passing, currentCGPA FROM student WHERE roll_number = ?`;
+    db.query(query, [roll_number], (err, result) => {
+      if(err){
+        return res.status(500).json({
+          success: false,
+          error: err.message,
+        });
+      }
 
-    if (result.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: "Student not found",
+      // Check if the student exists
+      if (result.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "Student not found",
+        });
+      }
+
+      // Return the student profile
+      return res.status(200).json({
+        success: true,
+        student: result[0],
       });
-    }
-
-    res.status(200).json({
-      success: true,
-      student: result[0],
     });
   } catch (err) {
     res.status(500).json({

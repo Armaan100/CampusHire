@@ -23,7 +23,7 @@ router.get("/profile", authCompany, companyController.Profile);
 
 router.post("/post-job", authCompany, companyController.PostJob);
 
-router.get("/get-applications", authCompany, companyController.GetApplications);
+router.get("/get-applications/:job_id", authCompany, companyController.GetApplications);
 
 router.put("/shortlist-resume", authCompany, companyController.ShortlistResume);
 

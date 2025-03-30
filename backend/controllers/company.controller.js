@@ -242,6 +242,7 @@ module.exports.PostJob = async (req, res) => {
 module.exports.GetApplications = async(req, res) => {
   try{
     const company_id = req.company.company_id;
+    const {job_id} = req.params;
     console.log(req.company);
 
     //fetch all applications applied to this company
@@ -250,10 +251,10 @@ module.exports.GetApplications = async(req, res) => {
     J.title, J.description, 
     S.name, S.email, S.resume, S.year_of_passing, S.current_cgpa
     FROM application A, job J, student S
-    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ?
+    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND J.job_id = ? 
     `;
 
-    db.query(query, [company_id], (err, result) => {
+    db.query(query, [company_id, job_id], (err, result) => {
       if(err){
         return res.status(500).json({
           success: false,
