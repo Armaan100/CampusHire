@@ -6,9 +6,9 @@ import JobCard from "./components/JobCard";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
-
 const StudentJob = () => {
   const [activeTab, setActiveTab] = useState("internships");
+  const [buttonType, setButtonType] = useState("apply");  //apply or applied
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,10 +18,16 @@ const StudentJob = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        const endpoint =
-          activeTab === "internships"
-            ? "http://localhost:5000/student/get-internships"
-            : "http://localhost:5000/student/get-full-time";
+        let endpoint = "";
+        if (activeTab === "internships") {
+          endpoint = "http://localhost:5000/student/get-internships";
+        } else if (activeTab === "full-time") {
+          endpoint = "http://localhost:5000/student/get-full-time";
+        } else if (activeTab === "applied-internships") {
+          endpoint = "http://localhost:5000/student/get-applied-internships";
+        } else if (activeTab === "applied-full-time") {
+          endpoint = "http://localhost:5000/student/get-applied-full-time";
+        }
 
         const response = await axios.get(endpoint, {
           headers: { Authorization: `Bearer ${token}` },
@@ -43,47 +49,69 @@ const StudentJob = () => {
     fetchJobs();
   }, [activeTab]);
 
-
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
-      
+
       <div className="flex flex-grow">
         {/* Sidebar */}
         <div className="w-64 bg-white shadow-md p-4">
           <h2 className="text-xl font-bold text-gray-800 mb-6">Job Types</h2>
           <div className="space-y-2">
             <button
-              onClick={() => setActiveTab('internships')}
+              onClick={() => {
+                setActiveTab("internships")
+                setButtonType("apply")
+                }}
               className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
-                activeTab === 'internships'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                activeTab === "internships"
+                  ? "bg-purple-600 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               Internships
             </button>
 
             <button
-              onClick={() => setActiveTab('full-time')}
+              onClick={() => {
+                setActiveTab("full-time")
+                setButtonType("apply")
+              }}
               className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
-                activeTab === 'full-time'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                activeTab === "full-time"
+                  ? "bg-purple-600 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               Full Time Jobs
             </button>
 
             <button
-              onClick={() => setActiveTab('full-time')}
+              onClick={() => {
+                setActiveTab("applied-internships")
+                setButtonType("applied")
+                }}
               className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
-                activeTab === 'full-time'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                activeTab === "applied-internships"
+                  ? "bg-purple-600 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
-              Applied Jobs/Internships
+              Applied Internships
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab("applied-full-time")
+                setButtonType("applied")
+                }}
+              className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
+                activeTab === "applied-full-time"
+                  ? "bg-purple-600 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              Applied Full Time
             </button>
           </div>
         </div>
@@ -91,7 +119,18 @@ const StudentJob = () => {
         {/* Main Content */}
         <main className="flex-grow p-8">
           <h1 className="text-2xl font-bold text-gray-800 mb-6">
-            {activeTab === 'internships' ? 'Internship Opportunities' : 'Full Time Job Opportunities'}
+            {(() => {
+              switch (activeTab) {
+                case "internships":
+                  return "Internship Opportunities";
+                case "full-time":
+                  return "Full Time Job Opportunities";
+                case "applied-internships":
+                  return "Applied Internships";
+                case "applied-full-time":
+                  return "Applied Full Time Jobs";
+              }
+            })()}
           </h1>
 
           {loading ? (
@@ -104,12 +143,25 @@ const StudentJob = () => {
             </div>
           ) : jobs.length === 0 ? (
             <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
-              No {activeTab === 'internships' ? 'internships' : 'full-time jobs'} found.
+              No{" "}
+              {(() => {
+              switch (activeTab) {
+                case "internships":
+                  return "Internship Opportunities ";
+                case "full-time":
+                  return "Full Time Job Opportunities ";
+                case "applied-internships":
+                  return "Applied Internships ";
+                case "applied-full-time":
+                  return "Applied Full Time Jobs ";
+              }
+            })()}
+              found.
             </div>
           ) : (
             <div className="space-y-4">
-              {jobs.map(job => (
-                <JobCard key={job.job_id} job={job} />
+              {jobs.map((job) => (
+                <JobCard key={job.job_id} job={job} buttonType={buttonType}/>
               ))}
             </div>
           )}

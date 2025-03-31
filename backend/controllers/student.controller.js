@@ -592,7 +592,7 @@ module.exports.GetAppliedInternships = async (req, res) => {
   try{
     const roll_number = req.student.roll_number;
     const query = `
-      SELECT A.job_id, J.title AS job_title, J.type AS job_type, C.name AS company_name
+      SELECT A.job_id, J.title, J.type, J.salary, C.name, A.overall_status AS status
       FROM Application A
       JOIN Job J ON A.job_id = J.job_id
       JOIN Company C ON J.company_id = C.company_id
@@ -608,17 +608,17 @@ module.exports.GetAppliedInternships = async (req, res) => {
       }
 
       // Check if the student has applied for any jobs
-      if (result.length === 0) {
-        return res.status(404).json({
-          success: false,
-          message: "No applied internships found",
-        });
-      }
+      // if (result.length === 0) {
+      //   return res.status(404).json({
+      //     success: false,
+      //     message: "No applied internships found",
+      //   });
+      // }
 
       // Return the list of applied jobs
       return res.status(200).json({
         success: true,
-        appliedInternships: result,
+        jobs: result,
       });
     });
   }catch(err){
@@ -634,7 +634,7 @@ module.exports.GetAppliedFullTime = async (req, res) => {
   try{
     const roll_number = req.student.roll_number;
     const query = `
-      SELECT A.job_id, J.title AS job_title, J.type AS job_type, C.name AS company_name
+      SELECT A.job_id, J.title, J.type, J.salary, C.name, A.overall_status
       FROM Application A
       JOIN Job J ON A.job_id = J.job_id
       JOIN Company C ON J.company_id = C.company_id
@@ -650,17 +650,17 @@ module.exports.GetAppliedFullTime = async (req, res) => {
       }
 
       // Check if the student has applied for any jobs
-      if (result.length === 0) {
-        return res.status(404).json({
-          success: false,
-          message: "No applied full time jobs found",
-        });
-      }
+      // if (result.length === 0) {
+      //   return res.status(404).json({
+      //     success: false,
+      //     message: "No applied full time jobs found",
+      //   });
+      // }
 
       // Return the list of applied jobs
       return res.status(200).json({
         success: true,
-        appliedJobs: result,
+        jobs: result,
       });
     });
   }catch(err){

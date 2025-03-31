@@ -12,7 +12,7 @@ import CompanyRegister from "./pages/Company/CompanyRegister";
 
 import StudentJob from "./pages/Student/StudentJob";
 import StudentApplyJob from "./pages/Student/StudentApplyJob";
-
+import StudentApplicationTrack from "./pages/Student/StudentApplicationTrack";
 
 function App() {
   return (
@@ -60,6 +60,16 @@ function App() {
             </StudentProtectedRoute>
           }
         />
+
+        <Route
+          path="/student/application-track/:jobId"
+          element={
+            <StudentProtectedRoute>
+              <StudentApplicationTrack />
+            </StudentProtectedRoute>
+          }
+        />
+
       </Routes>
     </div>
   );
