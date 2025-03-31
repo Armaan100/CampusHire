@@ -587,8 +587,8 @@ module.exports.GetProfile = async (req, res) => {
 */
 
 
-//getAppliedJobs
-module.exports.GetAppliedJobs = async (req, res) => {
+//getAppliedInternships
+module.exports.GetAppliedInternships = async (req, res) => {
   try{
     const roll_number = req.student.roll_number;
     const query = `
@@ -596,7 +596,7 @@ module.exports.GetAppliedJobs = async (req, res) => {
       FROM Application A
       JOIN Job J ON A.job_id = J.job_id
       JOIN Company C ON J.company_id = C.company_id
-      WHERE A.roll_number = ?
+      WHERE A.roll_number = ? AND J.type = 'Internship'
     `;
 
     db.query(query, [roll_number], (err, result) => {
@@ -611,7 +611,49 @@ module.exports.GetAppliedJobs = async (req, res) => {
       if (result.length === 0) {
         return res.status(404).json({
           success: false,
-          message: "No applied jobs found",
+          message: "No applied internships found",
+        });
+      }
+
+      // Return the list of applied jobs
+      return res.status(200).json({
+        success: true,
+        appliedInternships: result,
+      });
+    });
+  }catch(err){
+    res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
+}
+
+//getAppliedFullTimeJobs
+module.exports.GetAppliedFullTime = async (req, res) => {
+  try{
+    const roll_number = req.student.roll_number;
+    const query = `
+      SELECT A.job_id, J.title AS job_title, J.type AS job_type, C.name AS company_name
+      FROM Application A
+      JOIN Job J ON A.job_id = J.job_id
+      JOIN Company C ON J.company_id = C.company_id
+      WHERE A.roll_number = ? AND J.type = 'FullTime'
+    `;
+
+    db.query(query, [roll_number], (err, result) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          error: err.message,
+        });
+      }
+
+      // Check if the student has applied for any jobs
+      if (result.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "No applied full time jobs found",
         });
       }
 

@@ -40,7 +40,10 @@ router.post("/submit-coding-test", authStudent, studentController.SubmitCodingTe
 
 router.get("/get-profile", authStudent, studentController.GetProfile);
 
-router.get("/get-applied-jobs", authStudent, studentController.GetAppliedJobs); //to be done
+router.get("/get-applied-internships", authStudent, studentController.GetAppliedInternships); //to be done
+
+router.get("/get-applied-full-time", authStudent, studentController.GetAppliedFullTime); //to be done
+
 
 router.get("/get-application-details/:job_id", authStudent, studentController.GetApplicationDetails);  //to be done
 

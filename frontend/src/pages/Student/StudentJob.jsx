@@ -63,6 +63,7 @@ const StudentJob = () => {
             >
               Internships
             </button>
+
             <button
               onClick={() => setActiveTab('full-time')}
               className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
@@ -72,6 +73,17 @@ const StudentJob = () => {
               }`}
             >
               Full Time Jobs
+            </button>
+
+            <button
+              onClick={() => setActiveTab('full-time')}
+              className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
+                activeTab === 'full-time'
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Applied Jobs/Internships
             </button>
           </div>
         </div>

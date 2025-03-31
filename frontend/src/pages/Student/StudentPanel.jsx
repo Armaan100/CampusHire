@@ -6,7 +6,7 @@ import Header from "../../components/Header";
 import UploadResume from "./UploadResume";
 import Footer from "../../components/Footer";
 
-import StudentJob from "./StudentJob.jsx";
+// import StudentJob from "./StudentJob.jsx";
 
 const StudentPanel = () => {
   const navigate = useNavigate();
