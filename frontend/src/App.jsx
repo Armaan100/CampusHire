@@ -1,9 +1,11 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/Home/HomePage";
+import About from "./pages/Home/About";
 import StudentProtectedRoute from "./pages/Student/StudentProtectedRoute";
 // import CompanyProtectedRoute from './pages/Company/CompanyProtectedRoute';
 // import AdminProtectedRoute from './pages/Admin/AdminProtectedRoute';
+
 import StudentPanel from "./pages/Student/StudentPanel";
 import StudentLogin from "./pages/Student/StudentLogin";
 import StudentRegister from "./pages/Student/StudentRegister";
@@ -19,6 +21,8 @@ function App() {
     <div>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<About />} />
+
         <Route
           path="/student"
           element={

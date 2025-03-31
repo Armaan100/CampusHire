@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
  
 const Hero = () => {
     return (
-      <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 py-20 sm:py-28 lg:py-36 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 py-20 sm:py-28 lg:py-36 relative overflow-hidden min-h-screen">
         {/* Subtle shine overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-transparent to-white/10 opacity-30 pointer-events-none animate-shine"></div>
         
