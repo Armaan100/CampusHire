@@ -84,13 +84,13 @@ const StudentPanel = () => {
   }
 
   //take to the student Job and Internship Page
-  return (
-    <div>
-      <Header />
-      <StudentJob />
-      <Footer />
-    </div>
-  );
+  // return (
+  //   <div>
+  //     <Header />
+  //     <StudentJob />
+  //     <Footer />
+  //   </div>
+  // );
 };
 
 export default StudentPanel;

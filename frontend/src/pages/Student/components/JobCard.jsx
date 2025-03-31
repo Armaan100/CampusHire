@@ -25,7 +25,7 @@ const JobCard = ({job}) => {
               to={`/student/apply-job/${job.job_id}`}
               className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
             >
-              Apply Now
+              Apply 
             </Link>
           </div>
         </div>

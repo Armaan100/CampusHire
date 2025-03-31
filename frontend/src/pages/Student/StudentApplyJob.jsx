@@ -12,6 +12,18 @@ const StudentApplyJob = () => {
   const [error, setError] = useState(null);
   const [applied, setApplied] = useState(false);
 
+  //redirect to job page once applied
+  useEffect(() => {
+    if(applied){
+      const timer = setTimeout(() => {
+        navigate("/student");
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [applied, navigate]);
+
+  
   useEffect(() => {
     const fetchJobDetails = async () => {
       try {
@@ -109,19 +121,6 @@ const StudentApplyJob = () => {
                   </p>
                 </div>
               </div>
-
-              {/* <div>
-                <h2 className="font-semibold text-gray-700 mb-2">
-                  Requirements
-                </h2>
-                <div className="space-y-2">
-                  <p><span className="font-medium">Skills:</span> {job.required_skills || 'Not specified'}</p>
-                  <p>
-                    <span className="font-medium">CGPA:</span>{" "}
-                    {job.eligibility_cgpa || "Not specified"}
-                  </p>
-                </div>
-              </div> */}
             </div>
 
             <div className="mb-8">
@@ -142,9 +141,14 @@ const StudentApplyJob = () => {
                 onClick={handleApply}
                 className="px-6 py-3 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
               >
-                Apply Now
+                Apply
               </button>
             )}
+          </div>
+        )}
+        {applied && (
+          <div className="mt-5 text-gray-700 text-xl opacity-0 animate-[fadeInOut_0.8s_ease-in-out_infinite]">
+            Redirecting to Job Page ...
           </div>
         )}
       </main>

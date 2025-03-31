@@ -105,7 +105,7 @@ const StudentLogin = () => {
                       Login in...
                     </>
                   ) : (
-                    'Sign in'
+                    'Log in'
                   )}
                 </button>
               </div>

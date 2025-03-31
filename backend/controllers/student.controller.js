@@ -314,11 +314,15 @@ module.exports.GetInternships = async (req, res) => {
     const student = req.student;
     console.log(req.student);
 
-    const query = `SELECT J.*, C.name FROM Job J, Company C WHERE J.company_id = C.company_id AND eligibility_year = ? AND eligibility_cgpa <= ? AND type='Internship'`;
+    const query = `
+    SELECT J.*,
+    C.name 
+    FROM Job J, Company C
+    WHERE J.company_id = C.company_id AND eligibility_year = ? AND eligibility_cgpa <= ? AND type='Internship'`;
 
     db.query(
       query,
-      [student.year_of_passing, student.current_cgpa],
+      [student.year_of_passing, student.current_cgpa, null],
       (err, result) => {
         if (err) {
           return res.status(500).json({
@@ -326,12 +330,43 @@ module.exports.GetInternships = async (req, res) => {
             error: err.message,
           });
         }
-
+        
         console.log(result);
 
-        return res.status(200).json({
-          success: true,
-          jobs: result,
+        // Check if the student has applied for any internships
+        const query = `SELECT A.job_id FROM Application A, Job J WHERE A.job_id = J.job_id AND A.roll_number = ? AND J.type='Internship'`;  //to etch the job_id of internships student has applied for
+        db.query(query, [student.roll_number], (err, appliedInternships) => {
+          if (err) {
+            return res.status(500).json({
+              success: false,
+              error: err.message,
+            });
+          }
+          
+          let filteredInternships = [];
+
+          for(let r of result){
+            let isApplied = false;
+
+            for(let a of appliedInternships){
+              if(r.job_id === a.job_id){
+                isApplied = true;
+                break;
+              }
+            }
+
+            if(!isApplied){
+              filteredInternships.push(r);
+            }
+          }
+
+          console.log(filteredInternships);
+
+          // Return the list of internships
+          return res.status(200).json({
+            success: true,
+            jobs: filteredInternships
+          });
         });
       }
     );
@@ -387,10 +422,11 @@ module.exports.GetJobDetails = async (req, res) => {
 module.exports.ApplyJob = async (req, res) => {
   try {
     const { job_id } = req.body;
+    console.log(job_id);
     const roll_number = req.student.roll_number;
 
     //check if the student has already applied for the job
-    query = "SELECT * FROM Application WHERE job_id = ? AND roll_number = ?";
+    const query = "SELECT * FROM Application WHERE job_id = ? AND roll_number = ?";
     db.query(query, [job_id, roll_number], (err, result) => {
       if (err) {
         return res.status(500).json({

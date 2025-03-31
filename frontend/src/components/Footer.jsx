@@ -11,7 +11,7 @@ const Footer = () => {
           <div className="flex items-center space-x-1 text-gray-600">
             <span>Made with</span>
             <span className="text-pink-500">❤️</span>
-            <span>by your team</span>
+            <span>よ！</span>
           </div>
         </div>
       </footer>
