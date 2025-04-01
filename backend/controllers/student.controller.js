@@ -477,47 +477,9 @@ module.exports.SubmitCodingTest = async (req, res) => {
   try {
     const { job_id, coding_username } = req.body;
     const roll_number = req.student.roll_number;
-
-    //check if the student has applied for the job
-    const query = `SELECT * FROM Application WHERE job_id = ? AND roll_number = ?`;
-    db.query(query, [job_id, roll_number], (err, result) => {
-
-      if(err) {
-        return res.status(500).json({
-          success: false,
-          error: err.message,
-        });
-      }
-
-      //student has already applied for the job
-      if (result.length === 0) {
-        return res.status(400).json({
-          success: false,
-          message: "You have already applied for the job",
-        });
-      }
-
-      //student has already applied for the job
-      const query = `SELECT * FROM Application WHERE job_id = ? AND roll_number = ? AND coding_test_completed=?`;
-      db.query(query, [job_id, roll_number, 1], (err, result) => {
-        if(err) {
-          return res.status(500).json({
-            success: false,
-            error: err.message,
-          });
-        }
-
-        //student has already submitted the coding test
-        if (result.length > 0) {
-          return res.status(400).json({
-            success: false,
-            message: "You have already submitted the coding test",
-          });
-        }
-      })
-    });
     
-
+    //studet already had submitted the coding test validation done in frontend
+    
     //submit the coding test
     const updateQuery ="UPDATE application SET coding_test_completed = ?, coding_username = ? WHERE job_id = ? AND roll_number = ?";
 
@@ -691,6 +653,7 @@ module.exports.GetApplicationDetails = async (req, res) => {
         A.interview_status,
         A.overall_status,
         A.coding_test_link,
+        A.coding_test_completed,
         A.interview_date_time,
         A.interview_venue
         FROM application A, job J, company C
@@ -709,17 +672,17 @@ module.exports.GetApplicationDetails = async (req, res) => {
       }
 
       // Check if the application exists
-      if (result.length === 0) {
-        return res.status(404).json({
-          success: false,
-          message: "Application not found",
-        });
-      }
+      // if (result.length === 0) {
+      //   return res.status(404).json({
+      //     success: false,
+      //     message: "Application not found",
+      //   });
+      // }
 
       // Return the application details
       return res.status(200).json({
         success: true,
-        application: result[0],
+        applicationDetails: result[0],
       });
     });
   } catch (err) {
