@@ -8,7 +8,7 @@ import Footer from "../../components/Footer";
 
 // import StudentJob from "./StudentJob.jsx";
 
-const StudentPanel = () => {
+const StudentPanel = ({children}) => {
   const navigate = useNavigate();
   const [uploadedResume, setUploadedResume] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -24,11 +24,12 @@ const StudentPanel = () => {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+        console.log(response);
         setStudent(response.data.student);
         setUploadedResume(response.data.student.resume || false);
 
         if (response.status === 200) {
-            navigate('/student/jobs'); // Navigate directly to jobs page
+          navigate("/student/jobs"); // Navigate directly to jobs page
         }
       } catch (err) {
         console.error("Error: ", err);
@@ -91,6 +92,8 @@ const StudentPanel = () => {
   //     <Footer />
   //   </div>
   // );
+
+  return <div>{children}</div>;
 };
 
 export default StudentPanel;

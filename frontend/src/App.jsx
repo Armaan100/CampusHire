@@ -51,7 +51,9 @@ function App() {
           path="/student/jobs"
           element={
             <StudentProtectedRoute>
+            <StudentPanel>
               <StudentJob />
+            </StudentPanel>
             </StudentProtectedRoute>
           }
         />
