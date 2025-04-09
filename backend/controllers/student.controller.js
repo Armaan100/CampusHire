@@ -491,6 +491,8 @@ module.exports.SubmitCodingTest = async (req, res) => {
         });
       }
 
+      console.log("Yes");
+
       res.status(200).json({
         success: true,
         message: "Coding test submitted successfully",

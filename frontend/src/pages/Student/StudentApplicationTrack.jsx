@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import axios from "axios";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -15,32 +15,27 @@ const StudentApplicationTrack = () => {
   const [errMessage, setErrMessage] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [codingUserName, setCodingUsername] = useState("");
-  const [submitButtonLoading, setSubmitButtonLoading] = useState(false);
-
-  const fetchApplicationDetails = async () => {
-    try {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `http://localhost:5000/student/get-application-details/${jobId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setApplicationDetails(response.data.applicationDetails);
-      setError(null);
-    } catch (err) {
-      setError("Failed to load application details. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [submitButtonLoading, setSubmitButtonLoading] = useState(false); //add later
 
   useEffect(() => {
+    const fetchApplicationDetails = async () => {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `http://localhost:5000/student/get-application-details/${jobId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        console.log(response.data);
+        setApplicationDetails(response.data.applicationDetails);
+      } catch (err) {
+        setError("Failed to load application details. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchApplicationDetails();
   }, [jobId]);
-
-  useEffect(() => {
-    fetchApplicationDetails();
-  }, [activeTab]); // Fetch data when tab changes
 
   const DateTimeDisplay = ({ dateString }) => {
     const formattedDate = format(new Date(dateString), "MMMM dd, yyyy hh:mm a");
@@ -52,34 +47,6 @@ const StudentApplicationTrack = () => {
         <p>Time: {parts.slice(3).join(" ")}</p>
       </>
     );
-  };
-
-  const handleSubmitCodingTest = async () => {
-    setSubmitButtonLoading(true);
-    setErrMessage(null);
-
-    try {
-      const endpoint = `http://localhost:5000/student/submit-coding-test`;
-      const payload = {
-        job_id: jobId,
-        coding_username: codingUserName,
-      };
-      const response = await axios.post(endpoint, payload, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
-      
-      if (response.status === 200) {
-        setIsSubmitted(true);
-        fetchApplicationDetails(); // Refresh data after submission
-      }
-    } catch (err) {
-      console.error(err);
-      setErrMessage(
-        err.response?.data?.message || "Submission failed. Please try again."
-      );
-    } finally {
-      setSubmitButtonLoading(false);
-    }
   };
 
   const renderTabContent = () => {
@@ -159,19 +126,45 @@ const StudentApplicationTrack = () => {
                 />
 
                 <button
-                  className={`px-4 mt-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 ${
-                    submitButtonLoading ? 'opacity-75' : ''
-                  }`}
-                  onClick={handleSubmitCodingTest}
-                  disabled={submitButtonLoading}
+                  className="px-4 mt-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+                  onClick={async () => {
+                    try {
+                      const endpoint = `http://localhost:5000/student/submit-coding-test`;
+                      const payload = {
+                        job_id: jobId,
+                        coding_username: codingUserName,
+                      };
+                      const response = await axios.post(endpoint, payload, {
+                        headers: {
+                          Authorization: `Bearer ${localStorage.getItem(
+                            "token"
+                          )}`,
+                          "Content-Type": "application/json",
+                        },
+                      });
+                      if (response.status === 200) {
+                        setIsSubmitted(true);
+                      }
+
+                      console.log(isSubmitted);
+                    } catch (err) {
+                      console.error(err);
+                      setErrMessage(
+                        err.response?.data?.message ||
+                          `Some Error Occurred. Please try again.
+                          If still this problem persists, contact us from about us page`
+                      );
+                    }
+                  }}
                 >
-                  {submitButtonLoading ? 'Submitting...' : 'Submit'}
+                  Submit
                 </button>
 
                 {isSubmitted && (
                   <div className="bg-green-100 border border-green-600 text-green-700 px-4 py-2 rounded-lg mt-5">
                     <p className="text-lg font-medium">
-                      Coding Test Submitted Successfully
+                      Coding Test Submitted Successfully.
+                      Please refresh this page to get the latest status
                     </p>
                   </div>
                 )}
@@ -189,10 +182,12 @@ const StudentApplicationTrack = () => {
             )}
           </div>
         ) : (
-          <p className="text-lg">
-            You have already submitted the coding test. Check status in status
-            tab.
-          </p>
+          <>
+            <p className="text-lg">
+              You have already submitted the coding test. Check status in status
+              tab.
+            </p>
+          </>
         );
 
       case "coding-test-status":
@@ -214,6 +209,10 @@ const StudentApplicationTrack = () => {
         return (
           <div className="space-y-4">
             <p className="text-lg">
+              {/* {!applicationDetails.interview_scheduled
+                ? "Interview not scheduled yet"
+                : `Interview scheduled for ${new Date(applicationDetails.interview_date).toLocaleString()}`} */}
+
               {!applicationDetails.interview_date_time &&
               !applicationDetails.interview_venue ? (
                 "Interview not scheduled yet or check your Overall Status"
@@ -281,10 +280,20 @@ const StudentApplicationTrack = () => {
         {/* Main Content */}
         <main className="flex-grow p-8 bg-white ml-4 rounded-lg shadow">
           <h1 className="text-2xl font-bold text-gray-800 mb-6">
-            {activeTab
-              .split("-")
-              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-              .join(" ")}
+            {(() => {
+              switch (activeTab) {
+                case "overall-status":
+                  return "Overall Status";
+                case "resume-status":
+                  return "Resume Status";
+                case "coding-test":
+                  return "Coding Test";
+                case "coding-test-status":
+                  return "Coding Test Status";
+                case "interview-status":
+                  return "Interview Status";
+              }
+            })()}
           </h1>
 
           {loading ? (

@@ -365,7 +365,7 @@ module.exports.GetApplicationsPhase2 = async(req, res) => {
 
     //fetch all applications whose resume has been accepted to this company for this particular job
     const query = `
-    SELECT A.roll_number, A.job_id, A.coding_username
+    SELECT A.roll_number, A.job_id, A.coding_username,
     J.title, J.description, 
     S.name, S.email, S.resume, S.year_of_passing, S.current_cgpa
     FROM application A, job J, student S
