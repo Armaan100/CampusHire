@@ -29,7 +29,7 @@ const CompanyLogin = () => {
       );
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
-        navigate("/company");
+        navigate("/company/home");
       }
     } catch (err) {
       setErrMessage(err.response?.data?.message || "Login failed. Please try again.");

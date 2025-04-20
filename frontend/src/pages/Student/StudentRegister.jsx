@@ -22,7 +22,7 @@ const StudentRegister = () => {
   });
 
   const [errMessage, setErrMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  // const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = () => {
@@ -51,7 +51,7 @@ const StudentRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrMessage("");
-    setSuccessMessage("");
+    // setSuccessMessage("");
     setIsLoading(true);
 
     const validationError = validateForm();
@@ -62,6 +62,7 @@ const StudentRegister = () => {
     }
 
     try {
+      console.log("Sending request...");
       const response = await axios.post(
         "http://localhost:5000/student/register",
         formData

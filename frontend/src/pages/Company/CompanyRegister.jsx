@@ -59,7 +59,7 @@ const CompanyRegister = () => {
 
       if (response.status === 201) {
         localStorage.setItem("token", response.data.token);
-        navigate("/company");
+        navigate("/company/home");
       }
     } catch (err) {
       const errMsg =

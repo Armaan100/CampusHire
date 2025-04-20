@@ -21,8 +21,8 @@ module.exports.Register = async (req, res) => {
       phone,
       branch,
       semester,
-      yearOfPassing,
-      currentCGPA,
+      year_of_passing,
+      current_cgpa,
     } = req.body;
 
     //check if a file is uploaded
@@ -74,8 +74,8 @@ module.exports.Register = async (req, res) => {
             phone,
             branch,
             semester,
-            yearOfPassing,
-            currentCGPA,
+            year_of_passing,
+            current_cgpa,
           ],
           (err, result) => {
             if (err) {

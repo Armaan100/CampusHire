@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/Home/HomePage";
 import About from "./pages/Home/About";
 import StudentProtectedRoute from "./pages/Student/StudentProtectedRoute";
-// import CompanyProtectedRoute from './pages/Company/CompanyProtectedRoute';
+import CompanyProtectedRoute from './pages/Company/CompanyProtectedRoute';
 // import AdminProtectedRoute from './pages/Admin/AdminProtectedRoute';
 
 import StudentPanel from "./pages/Student/StudentPanel";
@@ -15,6 +15,10 @@ import CompanyRegister from "./pages/Company/CompanyRegister";
 import StudentJob from "./pages/Student/StudentJob";
 import StudentApplyJob from "./pages/Student/StudentApplyJob";
 import StudentApplicationTrack from "./pages/Student/StudentApplicationTrack";
+
+import CompanyHome from "./pages/Company/CompanyHome";
+import CompanyPostJob from "./pages/Company/CompanyPostJob";
+import CompanyGetJobs from "./pages/Company/CompanyGetJobs";
 
 function App() {
   return (
@@ -51,9 +55,9 @@ function App() {
           path="/student/jobs"
           element={
             <StudentProtectedRoute>
-            <StudentPanel>
-              <StudentJob />
-            </StudentPanel>
+              <StudentPanel>
+                <StudentJob />
+              </StudentPanel>
             </StudentProtectedRoute>
           }
         />
@@ -76,6 +80,32 @@ function App() {
           }
         />
 
+        <Route 
+          path="/company/home/"
+          element={
+            <CompanyProtectedRoute>
+              <CompanyHome />
+            </CompanyProtectedRoute>
+          }
+        />
+
+        <Route 
+          path="/company/post-job"
+          element={
+            <CompanyProtectedRoute>
+              <CompanyPostJob />
+            </CompanyProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/company/get-jobs"
+          element={
+            <CompanyProtectedRoute>
+              <CompanyGetJobs />
+            </CompanyProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );

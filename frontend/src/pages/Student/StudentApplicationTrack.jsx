@@ -6,7 +6,6 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 const StudentApplicationTrack = () => {
-  const navigate = useNavigate();
   const { jobId } = useParams();
   const [activeTab, setActiveTab] = useState("overall-status");
   const [applicationDetails, setApplicationDetails] = useState(null);
@@ -15,7 +14,6 @@ const StudentApplicationTrack = () => {
   const [errMessage, setErrMessage] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [codingUserName, setCodingUsername] = useState("");
-  const [submitButtonLoading, setSubmitButtonLoading] = useState(false); //add later
 
   useEffect(() => {
     const fetchApplicationDetails = async () => {

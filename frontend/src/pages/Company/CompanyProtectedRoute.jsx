@@ -16,19 +16,21 @@ const CompanyProtectedRoute = ({ children }) => {
 
         const verifyCompany = async () => {
             try{
-                const response = await axios.get("http://localhost:5000/company/profile", {
+                const response = await axios.get("http://localhost:5000/company/get-profile", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
 
-                if(response.status === 200){
+                if(response.status !== 200){
                     throw new Error("Unauthorized");
                 }
             }catch(err){
                 console.log("Error: ", err);
                 localStorage.removeItem("token");
                 navigate("/company-login");
+            }finally{
+                setIsLoading(false);
             }
         }
 
