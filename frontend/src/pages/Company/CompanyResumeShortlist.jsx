@@ -62,19 +62,21 @@ const CompanyResumeShortlist = () => {
   const handleDone = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post("http://localhost:5000/company/update-job-phase", {
+      console.log(token);
+      const response = await axios.post("http://localhost:5000/company/update-job-phase", 
+        {
         job_id: jobId,
         phase: "coding-test",
       },
       {
         headers: {
-          Authorization: `Bearer ${token}}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
-      console.log(response.data);
+    console.log(response.data);
 
-      navigate(`/company/job/send-coding-test/${jobId}`);
+    navigate(`/company/job/send-coding-test/${jobId}`);
     } catch (err) {
       console.error("Error updating job phase:", err);
     }

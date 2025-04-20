@@ -96,6 +96,7 @@ module.exports.authCompany = async(req, res, next) => {
             next();
         })
     }catch(err){
+        console.log("yo");
         return res.status(500).json({
             success: false,
             error: err.message
