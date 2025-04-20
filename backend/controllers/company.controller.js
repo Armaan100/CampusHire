@@ -661,3 +661,34 @@ module.exports.JobStatus = async(req, res) => {
     })
   }
 }
+
+
+
+module.exports.UpdateJobPhase = async(req, res) => {
+  try{
+    const {job_id, phase} = req.body; // phase: 'resume', 'coding-test', 'interview-schedule', 'interview-evaluation', 'complete'
+
+    const query = `
+    UPDATE JOB SET phase = ? WHERE job_id = ?
+    `;
+
+    db.query(query, [phase, job_id], (err, result) => {
+      if(err){
+        return res.status(500).json({
+          success: false,
+          error: err.message
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Job phase updated successfully"
+      })
+    });
+  }catch(err){
+    return res.status(500).json({
+      success: false,
+      error: err.message
+    })
+  }
+}
