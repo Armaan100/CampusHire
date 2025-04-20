@@ -237,6 +237,35 @@ module.exports.PostJob = async (req, res) => {
 };
 
 
+//GetPostedJobs
+module.exports.GetJobs = async (req, res) => {
+  try{
+    const company_id = req.company.company_id;
+    
+    const query = `
+    SELECT * FROM job WHERE company_id = ?
+    `;
+
+    db.query(query, [company_id], (err, result) => {
+      if(err){
+        return res.status(500).json({
+          success: false,
+          error: err.message
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        jobs: result
+      })
+    });
+  }catch(err){
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
+  }
+}
 
 //GetApplications
 module.exports.GetApplications = async(req, res) => {

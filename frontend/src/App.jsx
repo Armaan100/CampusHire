@@ -19,6 +19,8 @@ import StudentApplicationTrack from "./pages/Student/StudentApplicationTrack";
 import CompanyHome from "./pages/Company/CompanyHome";
 import CompanyPostJob from "./pages/Company/CompanyPostJob";
 import CompanyGetJobs from "./pages/Company/CompanyGetJobs";
+import CompanyJobRouter from "./pages/Company/CompanyJobRouter";
+
 
 function App() {
   return (
@@ -103,6 +105,15 @@ function App() {
           element={
             <CompanyProtectedRoute>
               <CompanyGetJobs />
+            </CompanyProtectedRoute>
+          }
+        />
+
+        <Route 
+          path="/company/job/:jobId"
+          element={
+            <CompanyProtectedRoute>
+              <CompanyJobRouter />
             </CompanyProtectedRoute>
           }
         />

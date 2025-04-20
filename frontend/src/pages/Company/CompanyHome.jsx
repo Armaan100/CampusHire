@@ -31,7 +31,7 @@ const CompanyHome = () => {
             {/* View Posted Jobs Button */}
             <div>
               <Link
-                to="/company/view-jobs"
+                to="/company/get-jobs"
                 className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all"
               >
                 View Posted Jobs
