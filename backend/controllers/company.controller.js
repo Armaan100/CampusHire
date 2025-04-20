@@ -620,3 +620,44 @@ module.exports.EvaluateInterview = async(req, res) => {
 // done till here✅😎 yo
 // bass olop corner cases and like sending the data olop bhalke and majot eta part where only coding test dile heitu he data set pothabo ase and not 
 // coding test accept ne reject hol
+
+
+// Get Job Status
+module.exports.JobStatus = async(req, res) => {
+  try{
+    const {job_id} = req.params;
+    const company_id = req.company.company_id;
+
+    const query = `
+    SELECT phase FROM job WHERE job_id = ? AND company_id = ?
+    `;
+
+    db.query(query, [job_id, company_id], (err, result) => {
+      if(err){
+        return res.status(500).json({
+          success: false,
+          error: err.message
+        });
+      }
+
+      if(result.length === 0){
+        return res.status(404).json({
+          success: false,
+          message: "Job not found"
+        });
+      }
+
+      console.log(result);
+
+      return res.status(200).json({
+        success: true,
+        job_status: result[0].phase
+      })
+    });
+  }catch(err){
+    return res.status(500).json({
+      success: false,
+      error: err.message
+    })
+  }
+}

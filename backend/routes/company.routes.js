@@ -41,6 +41,8 @@ router.put("/schedule-interview", authCompany, companyController.ScheduleIntervi
 
 router.put("/evaluate-interview", authCompany, companyController.EvaluateInterview);
 
+router.get("/job-status/:job_id", authCompany, companyController.JobStatus);
+
 module.exports = router;
 
 //remaining with -> validation of these routes + controller for student after applying to the company, i.e., submitting the coding test and all
