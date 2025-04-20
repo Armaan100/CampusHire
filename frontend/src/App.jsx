@@ -20,6 +20,11 @@ import CompanyHome from "./pages/Company/CompanyHome";
 import CompanyPostJob from "./pages/Company/CompanyPostJob";
 import CompanyGetJobs from "./pages/Company/CompanyGetJobs";
 import CompanyJobRouter from "./pages/Company/CompanyJobRouter";
+import CompanyResumeShortlist from "./pages/Company/CompanyResumeShortlist";
+import CompanySendCondingTest from "./pages/Company/CompanySendCondingTest";
+import CompanyEvaluateCodingTest from "./pages/Company/CompanyEvaluateCodingTest";
+import CompanyScheduleInterview from "./pages/Company/CompanyScheduleInterview";
+import CompanyEvaluateInterview from "./pages/Company/CompanyEvaluateInterview";
 
 
 function App() {
@@ -37,6 +42,17 @@ function App() {
             </StudentProtectedRoute>
           }
         />
+
+        <Route
+          path="/company"
+          element={
+            <CompanyProtectedRoute>
+              <CompanyHome />
+            </CompanyProtectedRoute>
+          }
+        />
+
+        
         {/* <Route path = "/student/logout" element = {
           <StudentProtectedRoute>
             <Logout />
@@ -114,6 +130,51 @@ function App() {
           element={
             <CompanyProtectedRoute>
               <CompanyJobRouter />
+            </CompanyProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/company/job/:jobId/resume"
+          element={
+            <CompanyProtectedRoute>
+              <CompanyResumeShortlist />
+            </CompanyProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/company/job/:jobId/send-coding-test"
+          element={
+            <CompanyProtectedRoute>
+              <CompanySendCondingTest />
+            </CompanyProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/company/job/:jobId/evaluate-coding-test"
+          element={
+            <CompanyProtectedRoute>
+              <CompanyEvaluateCodingTest />
+            </CompanyProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/company/job/:jobId/schedule-interview"
+          element={
+            <CompanyProtectedRoute>
+              <CompanyScheduleInterview />
+            </CompanyProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/company/job/:jobId/evaluate-interview"
+          element={
+            <CompanyProtectedRoute>
+              <CompanyEvaluateInterview />
             </CompanyProtectedRoute>
           }
         />

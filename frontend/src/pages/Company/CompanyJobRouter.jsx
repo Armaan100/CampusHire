@@ -17,16 +17,16 @@ const CompanyJobRouter = () => {
           case 'resume':
             navigate(`/company/job/${jobId}/resume`);
             break;
-          case 'codingTestForm':
+          case 'coding-test':
             navigate(`/company/job/${jobId}/send-coding-test`);
             break;
-          case 'codingTest':
+          case 'coding-test-evaluation':
             navigate(`/company/job/${jobId}/evaluate-coding-test`);
             break;
-          case 'interviewForm':
+          case 'interview-schedule':
             navigate(`/company/job/${jobId}/schedule-interview`);
             break;
-          case 'interview':
+          case 'interview-evaluation':
             navigate(`/company/job/${jobId}/evaluate-interview`);
             break;
           default:
