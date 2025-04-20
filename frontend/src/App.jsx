@@ -52,7 +52,7 @@ function App() {
           }
         />
 
-        
+
         {/* <Route path = "/student/logout" element = {
           <StudentProtectedRoute>
             <Logout />
@@ -135,7 +135,7 @@ function App() {
         />
 
         <Route
-          path="/company/job/:jobId/resume"
+          path="/company/job/resume/:jobId"
           element={
             <CompanyProtectedRoute>
               <CompanyResumeShortlist />
@@ -144,7 +144,7 @@ function App() {
         />
 
         <Route
-          path="/company/job/:jobId/send-coding-test"
+          path="/company/job/send-coding-test/:jobId"
           element={
             <CompanyProtectedRoute>
               <CompanySendCondingTest />

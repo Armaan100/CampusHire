@@ -4,7 +4,7 @@ const {body} = require('express-validator');
 const upload = require('../libs/multer');
 
 const studentController = require('../controllers/student.controller.js');
-const {authStudent} = require('../middlewares/auth.middleware');
+const {authStudent, authCompany} = require('../middlewares/auth.middleware');
 
 router.post("/register", [
     body('email').isEmail().withMessage('Please enter a valid email'),
@@ -48,5 +48,7 @@ router.get("/get-applied-full-time", authStudent, studentController.GetAppliedFu
 
 
 router.get("/get-application-details/:job_id", authStudent, studentController.GetApplicationDetails);  //to be done
+
+router.get("/download-resume/:resume", authCompany, studentController.DownloadResume); 
 
 module.exports = router;

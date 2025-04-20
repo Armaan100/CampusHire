@@ -27,19 +27,19 @@ router.get("/get-jobs", authCompany, companyController.GetJobs);
 
 router.get("/get-applications/:job_id", authCompany, companyController.GetApplications);
 
-router.put("/shortlist-resume", authCompany, companyController.ShortlistResume);
+router.post("/shortlist-resume", authCompany, companyController.ShortlistResume);
 
-router.put("/send-coding-test", authCompany, companyController.SendCodingTest);
+router.post("/send-coding-test", authCompany, companyController.SendCodingTest);
 
 router.get("/get-applications-phase2/:job_id", authCompany, companyController.GetApplicationsPhase2);
 
-router.put("/evaluate-coding-test", authCompany, companyController.EvaluateCodingTest);
+router.post("/evaluate-coding-test", authCompany, companyController.EvaluateCodingTest);
 
 router.get("/get-applications-phase3/:job_id", authCompany, companyController.GetApplicationsPhase3);
 
-router.put("/schedule-interview", authCompany, companyController.ScheduleInterview); 
+router.post("/schedule-interview", authCompany, companyController.ScheduleInterview); 
 
-router.put("/evaluate-interview", authCompany, companyController.EvaluateInterview);
+router.post("/evaluate-interview", authCompany, companyController.EvaluateInterview);
 
 router.get("/job-status/:job_id", authCompany, companyController.JobStatus);
 

@@ -10,12 +10,17 @@ const CompanyJobRouter = () => {
   useEffect(() => {
     const checkPhase = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/company/job-status/${jobId}`);
-        const phase = res.data.phase;
+        const token = localStorage.getItem("token");
+        const response = await axios.get(`http://localhost:5000/company/job-status/${jobId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const phase = response.data.job_status;
 
         switch (phase) {
           case 'resume':
-            navigate(`/company/job/${jobId}/resume`);
+            navigate(`/company/job/resume/${jobId}`);
             break;
           case 'coding-test':
             navigate(`/company/job/${jobId}/send-coding-test`);
@@ -36,7 +41,7 @@ const CompanyJobRouter = () => {
             alert('Invalid phase or something went wrong!');
         }
       } catch (err) {
-        alert('Error checking phase');
+        alert('Error while checking phase');
         console.error(err);
       } finally {
         setLoading(false);

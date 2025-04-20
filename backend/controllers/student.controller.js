@@ -695,3 +695,17 @@ module.exports.GetApplicationDetails = async (req, res) => {
     });
   }
 };
+
+
+module.exports.DownloadResume = async (req, res) => {
+  try{
+    const filename = req.params.resume;
+    console.log(filename);
+  }catch(err){
+    res.status(500).json({
+      success: false,
+      message: "Failed to download resume",
+      error: err.message,
+    });
+  }
+}
