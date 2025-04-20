@@ -280,7 +280,7 @@ module.exports.GetApplications = async(req, res) => {
     J.title, J.description, 
     S.name, S.email, S.resume, S.year_of_passing, S.current_cgpa
     FROM application A, job J, student S
-    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND J.job_id = ? 
+    WHERE A.resume_status IS NULL AND A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND J.job_id = ? 
     `;
 
     db.query(query, [company_id, job_id], (err, result) => {
