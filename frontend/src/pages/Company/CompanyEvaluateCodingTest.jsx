@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import Phase1Card from "./components/Phase1Card";
+import Phase2Card from "./components/Phase2Card";
 
 
 const CompanyEvaluateCodingTest = () => {
@@ -67,7 +67,7 @@ const CompanyEvaluateCodingTest = () => {
       const response = await axios.post("http://localhost:5000/company/update-job-phase", 
         {
         job_id: jobId,
-        phase: "coding-test",
+        phase: "interview-schedule",
       },
       {
         headers: {
@@ -77,7 +77,9 @@ const CompanyEvaluateCodingTest = () => {
     );
     console.log(response.data);
 
-    navigate(`/company/job/send-coding-test/${jobId}`);
+    setTimeout(() => {
+        navigate(`/company/job/schedule-interview/${jobId}`);
+    }, 1000);
     } catch (err) {
       console.error("Error updating job phase:", err);
     }
@@ -85,12 +87,12 @@ const CompanyEvaluateCodingTest = () => {
 
   return (
     <div className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold">Resume Shortlisting</h1>
+      <h1 className="text-2xl font-bold">Coding Test Evaluation</h1>
       {applications.length === 0 ? (
         <p>No applications pending.</p>
       ) : (
         applications.map((student) => (
-          <Phase1Card key={student.roll_number} student={student} onDecision={handleDecision} />
+          <Phase2Card key={student.roll_number} student={student} onDecision={handleDecision} />
         ))
       )}
 

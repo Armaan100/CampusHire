@@ -278,7 +278,7 @@ module.exports.GetApplications = async(req, res) => {
     const query = `
     SELECT A.roll_number, A.job_id,
     J.title, J.description, 
-    S.name, S.email, S.resume, S.year_of_passing, S.current_cgpa
+    S.name, S.email, S.resume, S.year_of_passing, S.current_cgpa, S.phone
     FROM application A, job J, student S
     WHERE A.resume_status IS NULL AND A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND J.job_id = ? 
     `;
@@ -396,9 +396,9 @@ module.exports.GetApplicationsPhase2 = async(req, res) => {
     const query = `
     SELECT A.roll_number, A.job_id, A.coding_username,
     J.title, J.description, 
-    S.name, S.email, S.resume, S.year_of_passing, S.current_cgpa
+    S.name, S.email, S.resume, S.year_of_passing, S.current_cgpa, S.phone
     FROM application A, job J, student S
-    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.resume_status = ? AND A.job_id = ?
+    WHERE A.coding_test_status IS NULL AND A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.resume_status = ? AND A.job_id = ?
     `;
 
     db.query(query, [company_id, 'accepted', job_id], (err, result) => {
@@ -472,7 +472,7 @@ module.exports.GetApplicationsPhase3 = async(req, res) => {
     const query = `
     SELECT A.roll_number, A.job_id,
     J.title, J.description, 
-    S.name, S.email, S.resume
+    S.name, S.email, S.resume, S.phone
     FROM application A, job J, student S
     WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.coding_test_status = ? AND A.job_id = ?
     `;

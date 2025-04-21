@@ -33,7 +33,7 @@ const Phase1Card = ({ student, onDecision }) => {
       <h2 className="text-lg font-semibold">Candidate Details</h2>
       <p><strong>Name:</strong> {student.name}</p>
       <p><strong>Roll Number:</strong> {student.roll_number}</p>
-      <p><strong>Phone Number:</strong> {student.phone_number}</p>
+      <p><strong>Phone Number:</strong> {student.phone}</p>
       
       <button
         onClick={() => downloadResume(resume_destination)}
