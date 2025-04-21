@@ -25,7 +25,7 @@ import CompanySendCodingTest from "./pages/Company/CompanySendCodingTest";
 import CompanyEvaluateCodingTest from "./pages/Company/CompanyEvaluateCodingTest";
 import CompanyScheduleInterview from "./pages/Company/CompanyScheduleInterview";
 import CompanyEvaluateInterview from "./pages/Company/CompanyEvaluateInterview";
-
+import CompanyComplete from "./pages/Company/CompanyComplete";
 
 function App() {
   return (
@@ -175,6 +175,16 @@ function App() {
           element={
             <CompanyProtectedRoute>
               <CompanyEvaluateInterview />
+            </CompanyProtectedRoute>
+          }
+        />
+
+
+        <Route 
+          path="/company/job/complete/:jobId"
+          element={
+            <CompanyProtectedRoute>
+              <CompanyComplete />
             </CompanyProtectedRoute>
           }
         />

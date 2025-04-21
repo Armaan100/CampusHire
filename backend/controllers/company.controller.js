@@ -707,7 +707,7 @@ module.exports.GetApplicationsPhase4 = async(req, res) => {
     J.title, J.description, 
     S.name, S.email, S.resume, S.phone
     FROM application A, job J, student S
-    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.coding_test_status = ? AND A.job_id = ?
+    WHERE A.interview_status IS NULL AND A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.coding_test_status = ? AND A.job_id = ?
     `;
 
     db.query(query, [company_id, 'accepted', job_id], (err, result) => {
