@@ -474,7 +474,7 @@ module.exports.GetApplicationsPhase3 = async(req, res) => {
     J.title, J.description, 
     S.name, S.email, S.resume, S.phone
     FROM application A, job J, student S
-    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.coding_test_status = ? AND A.job_id = ?
+    WHERE A.interview_date_time IS NULL AND A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.coding_test_status = ? AND A.job_id = ?
     `;
 
     db.query(query, [company_id, 'accepted', job_id], (err, result) => {
@@ -544,40 +544,40 @@ module.exports.ScheduleInterview = async(req, res) => {
 
 
 //GetApplicationsPhase3 <-> jaar jaar coding test accept hol eheti fetch hobo and mark time finally ki interview clear koril ne nai based on the interview
-module.exports.GetApplicationsPhase3 = async(req, res) => {
-  try{
-    const company_id = req.company.company_id;
+// module.exports.GetApplicationsPhase3 = async(req, res) => {
+//   try{
+//     const company_id = req.company.company_id;
 
-    //fetch all applications whose coding test has been accepted to this company
-    const query = `
-    SELECT A.roll_number, A.job_id,
-    J.title, J.description, 
-    S.name, S.email, S.resume
-    FROM application A, job J, student S
-    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.coding_test_status = ?
-    `;
+//     //fetch all applications whose coding test has been accepted to this company
+//     const query = `
+//     SELECT A.roll_number, A.job_id,
+//     J.title, J.description, 
+//     S.name, S.email, S.resume
+//     FROM application A, job J, student S
+//     WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.coding_test_status = ?
+//     `;
 
-    db.query(query, [company_id, 'accepted'], (err, result) => {
-      if(err){
-        return res.status(500).json({
-          success: false,
-          error: err.message
-        });
-      }
+//     db.query(query, [company_id, 'accepted'], (err, result) => {
+//       if(err){
+//         return res.status(500).json({
+//           success: false,
+//           error: err.message
+//         });
+//       }
 
-      return res.status(200).json({
-        success: true,
-        applications: result
-      })
-    });
+//       return res.status(200).json({
+//         success: true,
+//         applications: result
+//       })
+//     });
 
-  }catch(err){
-    res.status(500).json({
-      success: false,
-      error: err.message
-    });
-  }
-}
+//   }catch(err){
+//     res.status(500).json({
+//       success: false,
+//       error: err.message
+//     });
+//   }
+// }
 
 
 //Evaluate Interview
@@ -690,5 +690,44 @@ module.exports.UpdateJobPhase = async(req, res) => {
       success: false,
       error: err.message
     })
+  }
+}
+
+
+
+// getApplicationsPhase4 <-> jaar jaar interview schedule hol eheti fetch hobo and mark time finally ki interview clear koril ne nai based on the interview
+module.exports.GetApplicationsPhase4 = async(req, res) => {
+  try{
+    const company_id = req.company.company_id;
+    const {job_id} = req.params;
+
+    //fetch all applications whose coding test has been accepted to this company
+    const query = `
+    SELECT A.roll_number, A.job_id,
+    J.title, J.description, 
+    S.name, S.email, S.resume, S.phone
+    FROM application A, job J, student S
+    WHERE A.job_id = J.job_id AND A.roll_number = S.roll_number AND J.company_id = ? AND A.coding_test_status = ? AND A.job_id = ?
+    `;
+
+    db.query(query, [company_id, 'accepted', job_id], (err, result) => {
+      if(err){
+        return res.status(500).json({
+          success: false,
+          error: err.message
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        applications: result
+      })
+    });
+
+  }catch(err){
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
   }
 }

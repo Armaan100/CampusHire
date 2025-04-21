@@ -39,6 +39,8 @@ router.get("/get-applications-phase3/:job_id", authCompany, companyController.Ge
 
 router.post("/schedule-interview", authCompany, companyController.ScheduleInterview); 
 
+router.get("/get-applications-phase4/:job_id", authCompany, companyController.GetApplicationsPhase4);
+
 router.post("/evaluate-interview", authCompany, companyController.EvaluateInterview);
 
 router.get("/job-status/:job_id", authCompany, companyController.JobStatus);
