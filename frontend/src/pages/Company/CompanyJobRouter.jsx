@@ -17,25 +17,26 @@ const CompanyJobRouter = () => {
             },
         });
         const phase = response.data.job_status;
-
+        console.log(phase);
+        
         switch (phase) {
           case 'resume':
             navigate(`/company/job/resume/${jobId}`);
             break;
           case 'coding-test':
-            navigate(`/company/job/${jobId}/send-coding-test`);
+            navigate(`/company/job/send-coding-test/${jobId}`);
             break;
           case 'coding-test-evaluation':
-            navigate(`/company/job/${jobId}/evaluate-coding-test`);
+            navigate(`/company/job/evaluate-coding-test/${jobId}`);
             break;
           case 'interview-schedule':
-            navigate(`/company/job/${jobId}/schedule-interview`);
+            navigate(`/company/job/schedule-interview/${jobId}`);
             break;
           case 'interview-evaluation':
-            navigate(`/company/job/${jobId}/evaluate-interview`);
+            navigate(`/company/job/evaluate-interview/${jobId}`);
             break;
           case 'complete':
-            navigate(`/company/job/${jobId}/complete`);
+            navigate(`/company/job/complete/${jobId}`);
             break;
           default:
             alert('Invalid phase or something went wrong!');

@@ -21,7 +21,7 @@ import CompanyPostJob from "./pages/Company/CompanyPostJob";
 import CompanyGetJobs from "./pages/Company/CompanyGetJobs";
 import CompanyJobRouter from "./pages/Company/CompanyJobRouter";
 import CompanyResumeShortlist from "./pages/Company/CompanyResumeShortlist";
-import CompanySendCondingTest from "./pages/Company/CompanySendCondingTest";
+import CompanySendCodingTest from "./pages/Company/CompanySendCodingTest";
 import CompanyEvaluateCodingTest from "./pages/Company/CompanyEvaluateCodingTest";
 import CompanyScheduleInterview from "./pages/Company/CompanyScheduleInterview";
 import CompanyEvaluateInterview from "./pages/Company/CompanyEvaluateInterview";
@@ -147,13 +147,13 @@ function App() {
           path="/company/job/send-coding-test/:jobId"
           element={
             <CompanyProtectedRoute>
-              <CompanySendCondingTest />
+              <CompanySendCodingTest />
             </CompanyProtectedRoute>
           }
         />
 
         <Route
-          path="/company/job/:jobId/evaluate-coding-test"
+          path="/company/job/evaluate-coding-test/:jobId"
           element={
             <CompanyProtectedRoute>
               <CompanyEvaluateCodingTest />
@@ -162,7 +162,7 @@ function App() {
         />
 
         <Route
-          path="/company/job/:jobId/schedule-interview"
+          path="/company/job/schedule-interview/:jobId"
           element={
             <CompanyProtectedRoute>
               <CompanyScheduleInterview />
@@ -171,7 +171,7 @@ function App() {
         />
 
         <Route
-          path="/company/job/:jobId/evaluate-interview"
+          path="/company/job/evaluate-interview/:jobId"
           element={
             <CompanyProtectedRoute>
               <CompanyEvaluateInterview />
