@@ -504,7 +504,7 @@ module.exports.GetApplicationsPhase3 = async(req, res) => {
 module.exports.ScheduleInterview = async(req, res) => {
   try{
     const { roll_number, job_id, interview_date_time, interview_venue } = req.body;
-
+    console.log(req.body);
     //interview_date_time: "2021-08-10 10:00:00"
 
     if (!interview_date_time || !interview_venue) {

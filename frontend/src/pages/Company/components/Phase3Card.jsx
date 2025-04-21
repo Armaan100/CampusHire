@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const Phase3Card = ({ student, jobId }) => {
+const Phase3Card = ({ student, jobId, onScheduled }) => {
   const [interviewDate, setInterviewDate] = useState("");
   const [interviewTime, setInterviewTime] = useState("");
   const [interviewVenue, setInterviewVenue] = useState("");
@@ -14,6 +14,7 @@ const Phase3Card = ({ student, jobId }) => {
       return;
     }
 
+    console.log(interviewDate);
     const interviewDateTime = `${interviewDate} ${interviewTime}`;
 
     const payload = {
@@ -24,18 +25,19 @@ const Phase3Card = ({ student, jobId }) => {
     };
 
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.post(
         "http://localhost:5000/company/schedule-interview",
         payload,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      console.log("Interview scheduled:", response.data);
-      alert("Interview scheduled successfully!");
+      onScheduled(student.roll_number); 
+      console.log(response.data);
     } catch (error) {
       console.error("Error scheduling interview:", error);
       alert("Failed to schedule interview.");
@@ -43,9 +45,8 @@ const Phase3Card = ({ student, jobId }) => {
   };
 
   return (
-    <div className="border-2 border-blue-600 rounded-lg p-4 shadow space-y-2 bg-white">
+    <div className="border-2 border-purple-600 rounded-lg p-4 shadow space-y-2 bg-white">
       <h2 className="text-lg font-semibold">Candidate Details</h2>
-      <p><strong>Coding Username:</strong> <span className="font-bold">{student.coding_username}</span></p>
       <p><strong>Name:</strong> {student.name}</p>
       <p><strong>Roll Number:</strong> {student.roll_number}</p>
       <p><strong>Phone Number:</strong> {student.phone}</p>
@@ -87,7 +88,7 @@ const Phase3Card = ({ student, jobId }) => {
 
         <button
           type="submit"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mt-2"
+          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded mt-2"
         >
           Schedule Interview
         </button>

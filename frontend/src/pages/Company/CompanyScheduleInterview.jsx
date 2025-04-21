@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Phase3Card from "./components/Phase3Card";
 
 const CompanyScheduleInterview = () => {
-    const [applications, setApplications] = useState([]);
+  const [applications, setApplications] = useState([]);
   const {jobId} = useParams();
 
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const CompanyScheduleInterview = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:5000/company/get-applications/${jobId}`,
+        `http://localhost:5000/company/get-applications-phase3/${jobId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -31,31 +31,10 @@ const CompanyScheduleInterview = () => {
     fetchApplications();
   }, []);
 
-  const handleDecision = async (roll_number, decision) => {
-    try {
-      const shortlistingDetails = {
-        roll_number,
-        job_id: jobId,
-        resume_status: decision,
-      }
-
-      const response = await axios.post("http://localhost:5000/company/shortlist-resume", 
-        shortlistingDetails,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      console.log(response.data);
-
+  const handleScheduleSuccess = async (roll_number, decision) => {  
       setApplications((prev) =>
         prev.filter((student) => student.roll_number !== roll_number)
       );
-    } catch (err) {
-      console.error("Error shortlisting resume:", err);
-    }
   };
 
   const handleDone = async () => {
@@ -65,7 +44,7 @@ const CompanyScheduleInterview = () => {
       const response = await axios.post("http://localhost:5000/company/update-job-phase", 
         {
         job_id: jobId,
-        phase: "coding-test",
+        phase: "interview-evaluation",
       },
       {
         headers: {
@@ -75,7 +54,7 @@ const CompanyScheduleInterview = () => {
     );
     console.log(response.data);
 
-    navigate(`/company/job/send-coding-test/${jobId}`);
+    navigate(`/company/job/evaluate-interview/${jobId}`);
     } catch (err) {
       console.error("Error updating job phase:", err);
     }
@@ -83,12 +62,16 @@ const CompanyScheduleInterview = () => {
 
   return (
     <div className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold">Resume Shortlisting</h1>
+      <h1 className="text-2xl font-bold">Schedule Interview</h1>
       {applications.length === 0 ? (
         <p>No applications pending.</p>
       ) : (
         applications.map((student) => (
-          <Phase3Card key={student.roll_number} student={student} onDecision={handleDecision} />
+          <Phase3Card 
+          key={student.roll_number} 
+          student={student}
+          jobId={jobId}
+          onScheduled={handleScheduleSuccess} />
         ))
       )}
 
@@ -97,7 +80,7 @@ const CompanyScheduleInterview = () => {
           className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded"
           onClick={handleDone}
         >
-          Done & Proceed to Coding Test
+          Done & Proceed to Interview List
         </button>
       </div>
     </div>
