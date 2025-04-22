@@ -17,7 +17,7 @@ const adminRoutes = require("./routes/admin.routes");
 app.use(logger("dev"));
 
 app.use(cors({
-    origin: "https://campushire.netlify.app",
+    origin: "*",
     credentials: true,
 }));
 app.options('*', cors());
