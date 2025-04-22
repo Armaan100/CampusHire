@@ -1,1 +1,8 @@
 runtime: nodejs22
+
+env_variables:
+  MYSQL_HOST: "34.69.196.206"
+  MYSQL_USER: "armaan"
+  MYSQL_PASSWORD: "armaan@1234"
+  MYSQL_DB: "campus-hire"
+  JWT_SECRET: "yonigg"

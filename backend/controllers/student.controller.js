@@ -6,7 +6,7 @@ const path = require("path");
 const fs = require("fs");
 const { query } = require("express-validator");
 
-//Register Student
+//Register student
 module.exports.Register = async (req, res) => {
   console.log(req.body);
 
@@ -61,7 +61,7 @@ module.exports.Register = async (req, res) => {
 
         //insert the student into the database
         const query =
-          "INSERT INTO Student (roll_number, name, password, city, state, email, phone, branch, semester, year_of_passing, current_cgpa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+          "INSERT INTO student (roll_number, name, password, city, state, email, phone, branch, semester, year_of_passing, current_cgpa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         db.query(
           query,
           [
@@ -79,6 +79,7 @@ module.exports.Register = async (req, res) => {
           ],
           (err, result) => {
             if (err) {
+              console.error("Error inserting student:", err.message);
               return res.status(500).json({
                 success: false,
                 message: "Problem making the query",
@@ -96,7 +97,7 @@ module.exports.Register = async (req, res) => {
 
             res.status(200).json({
               success: true,
-              message: "Student registered successfully",
+              message: "student registered successfully",
               token,
             });
           }
@@ -112,7 +113,7 @@ module.exports.Register = async (req, res) => {
   }
 };
 
-//Login Student
+//Login student
 module.exports.Login = async (req, res) => {
   try {
     const { roll_number, password } = req.body;
@@ -158,7 +159,7 @@ module.exports.Login = async (req, res) => {
 
         res.status(200).json({
           success: true,
-          message: "Student logged in successfully",
+          message: "student logged in successfully",
           token,
         });
       }
@@ -171,14 +172,14 @@ module.exports.Login = async (req, res) => {
   }
 };
 
-//Logout Student
+//Logout student
 module.exports.Logout = async (req, res) => {
   try {
     res.clearCookie("token");
 
     return res.status(200).json({
       success: true,
-      message: "Student logged out successfully",
+      message: "student logged out successfully",
     });
   } catch (error) {
     return res.status(500).json({
@@ -189,10 +190,11 @@ module.exports.Logout = async (req, res) => {
 };
 
 
-//Profile Student
+//Profile student
 module.exports.GetProfile = async (req, res) => {
   try {
     const roll_number = req.student.roll_number;
+    console.log(roll_number);
 
     db.query(
       "SELECT * FROM student WHERE roll_number = ?",
@@ -209,7 +211,7 @@ module.exports.GetProfile = async (req, res) => {
         if (result.length === 0) {
           return res.status(400).json({
             success: false,
-            message: "Student not found",
+            message: "student not found",
           });
         }
 
@@ -276,12 +278,12 @@ module.exports.UploadResume = async (req, res) => {
 };
 
 
-//getJobs
+//getjobs
 module.exports.GetFullTime = async (req, res) => {
   try {
     const student = req.student;
 
-    const query = `SELECT J.*, C.name FROM Job J, Company C WHERE J.company_id = C.company_id AND eligibility_year = ? AND eligibility_cgpa <= ? AND type='FullTime'`;
+    const query = `SELECT J.*, C.name FROM job J, company C WHERE J.company_id = C.company_id AND eligibility_year = ? AND eligibility_cgpa <= ? AND type='FullTime'`;
 
     db.query(
       query,
@@ -317,7 +319,7 @@ module.exports.GetInternships = async (req, res) => {
     const query = `
     SELECT J.*,
     C.name 
-    FROM Job J, Company C
+    FROM job J, company C
     WHERE J.company_id = C.company_id AND eligibility_year = ? AND eligibility_cgpa <= ? AND type='Internship'`;
 
     db.query(
@@ -334,7 +336,7 @@ module.exports.GetInternships = async (req, res) => {
         console.log(result);
 
         // Check if the student has applied for any internships
-        const query = `SELECT A.job_id FROM Application A, Job J WHERE A.job_id = J.job_id AND A.roll_number = ? AND J.type='Internship'`;  //to etch the job_id of internships student has applied for
+        const query = `SELECT A.job_id FROM application A, job J WHERE A.job_id = J.job_id AND A.roll_number = ? AND J.type='Internship'`;  //to etch the job_id of internships student has applied for
         db.query(query, [student.roll_number], (err, appliedInternships) => {
           if (err) {
             return res.status(500).json({
@@ -379,14 +381,14 @@ module.exports.GetInternships = async (req, res) => {
 };
 
 
-//getJobDetails
+//getjobDetails
 module.exports.GetJobDetails = async (req, res) => {
   const job_id = req.params.job_id;
   const roll_number = req.student.roll_number;
   console.log(roll_number, job_id);
 
   try{
-    const query = `SELECT J.*, C.* from job J, Company C WHERE J.company_id = C.company_id AND job_id = ?`;
+    const query = `SELECT J.*, C.* from job J, company C WHERE J.company_id = C.company_id AND job_id = ?`;
     db.query(query, [job_id], (err, result) => {
       if(err){
         return res.status(500).json({
@@ -399,7 +401,7 @@ module.exports.GetJobDetails = async (req, res) => {
       if(result.length === 0){
         return res.status(404).json({
           success: false,
-          message: "Job not found",
+          message: "job not found",
         });
       }
 
@@ -418,7 +420,7 @@ module.exports.GetJobDetails = async (req, res) => {
 }
 
 
-//applyJob
+//applyjob
 module.exports.ApplyJob = async (req, res) => {
   try {
     const { job_id } = req.body;
@@ -426,7 +428,7 @@ module.exports.ApplyJob = async (req, res) => {
     const roll_number = req.student.roll_number;
 
     //check if the student has already applied for the job
-    const query = "SELECT * FROM Application WHERE job_id = ? AND roll_number = ?";
+    const query = "SELECT * FROM application WHERE job_id = ? AND roll_number = ?";
     db.query(query, [job_id, roll_number], (err, result) => {
       if (err) {
         return res.status(500).json({
@@ -445,7 +447,7 @@ module.exports.ApplyJob = async (req, res) => {
 
       //apply for the job
       const query =
-        "INSERT INTO Application (job_id, roll_number, overall_status) VALUES (?, ?, ?)";
+        "INSERT INTO application (job_id, roll_number, overall_status) VALUES (?, ?, ?)";
       db.query(query, [job_id, roll_number, "Applied"], (err, result) => {
         if (err) {
           return res.status(500).json({
@@ -456,7 +458,7 @@ module.exports.ApplyJob = async (req, res) => {
 
         res.status(200).json({
           success: true,
-          message: "Job applied successfully",
+          message: "job applied successfully",
           roll_number: roll_number,
           job_id: job_id,
         });
@@ -531,7 +533,7 @@ module.exports.GetProfile = async (req, res) => {
       if (result.length === 0) {
         return res.status(404).json({
           success: false,
-          message: "Student not found",
+          message: "student not found",
         });
       }
 
@@ -557,9 +559,9 @@ module.exports.GetAppliedInternships = async (req, res) => {
     const roll_number = req.student.roll_number;
     const query = `
       SELECT A.job_id, J.title, J.type, J.salary, C.name, A.overall_status AS status
-      FROM Application A
-      JOIN Job J ON A.job_id = J.job_id
-      JOIN Company C ON J.company_id = C.company_id
+      FROM application A
+      JOIN job J ON A.job_id = J.job_id
+      JOIN company C ON J.company_id = C.company_id
       WHERE A.roll_number = ? AND J.type = 'Internship'
     `;
 
@@ -593,15 +595,15 @@ module.exports.GetAppliedInternships = async (req, res) => {
   }
 }
 
-//getAppliedFullTimeJobs
+//getAppliedFullTimejobs
 module.exports.GetAppliedFullTime = async (req, res) => {
   try{
     const roll_number = req.student.roll_number;
     const query = `
       SELECT A.job_id, J.title, J.type, J.salary, C.name, A.overall_status
-      FROM Application A
-      JOIN Job J ON A.job_id = J.job_id
-      JOIN Company C ON J.company_id = C.company_id
+      FROM application A
+      JOIN job J ON A.job_id = J.job_id
+      JOIN company C ON J.company_id = C.company_id
       WHERE A.roll_number = ? AND J.type = 'FullTime'
     `;
 
@@ -637,7 +639,7 @@ module.exports.GetAppliedFullTime = async (req, res) => {
 
 
 
-//getApplication
+//getapplication
 module.exports.GetApplicationDetails = async (req, res) => {
   try {
     const roll_number = req.student.roll_number;
@@ -677,7 +679,7 @@ module.exports.GetApplicationDetails = async (req, res) => {
       // if (result.length === 0) {
       //   return res.status(404).json({
       //     success: false,
-      //     message: "Application not found",
+      //     message: "application not found",
       //   });
       // }
 

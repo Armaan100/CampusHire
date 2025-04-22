@@ -5,8 +5,9 @@ const db = require('../db/db');
 module.exports.authStudent = async(req, res, next) => {
     try{
         //extract token from cookies or authorization header
-        console.log("Auth Student...");
+        console.log("Auth student...");
         const token = req.cookies.token || req.headers.authorization.split(' ')[1];
+        console.log(token);
         console.log(req.headers.authorization.split(' ')[1]);
 
         if(!token){
@@ -22,7 +23,7 @@ module.exports.authStudent = async(req, res, next) => {
         console.log(rollNumber)
 
         //fetch student from db using rollNumber
-        const query = "SELECT * FROM Student WHERE roll_number = ?";
+        const query = "SELECT * FROM student WHERE roll_number = ?";
         db.query(query, [rollNumber], (err, result) => {
             if(err){
                 return res.status(500).json({
@@ -36,7 +37,7 @@ module.exports.authStudent = async(req, res, next) => {
             if(result.length === 0){
                 return res.status(401).json({
                     success: false,
-                    message: "Unauthorized: Invalid Student"
+                    message: "Unauthorized: Invalid student"
                 })
             }
 
@@ -87,7 +88,7 @@ module.exports.authCompany = async(req, res, next) => {
             if(result.length === 0){
                 return res.status(401).json({
                     success: false,
-                    message: "Unauthorized: Invalid Company"
+                    message: "Unauthorized: Invalid company"
                 })
             }
 
