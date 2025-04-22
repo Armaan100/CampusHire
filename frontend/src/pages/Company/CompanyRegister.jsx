@@ -53,7 +53,7 @@ const CompanyRegister = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/company/register",
+        "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/register",
         formData
       );
 

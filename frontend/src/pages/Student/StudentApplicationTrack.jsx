@@ -21,7 +21,7 @@ const StudentApplicationTrack = () => {
         setLoading(true);
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `http://localhost:5000/student/get-application-details/${jobId}`,
+          `https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/get-application-details/${jobId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         console.log(response.data);
@@ -127,7 +127,7 @@ const StudentApplicationTrack = () => {
                   className="px-4 mt-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
                   onClick={async () => {
                     try {
-                      const endpoint = `http://localhost:5000/student/submit-coding-test`;
+                      const endpoint = `https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/submit-coding-test`;
                       const payload = {
                         job_id: jobId,
                         coding_username: codingUserName,

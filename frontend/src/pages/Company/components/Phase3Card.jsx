@@ -27,7 +27,7 @@ const Phase3Card = ({ student, jobId, onScheduled }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:5000/company/schedule-interview",
+        "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/schedule-interview",
         payload,
         {
           headers: {

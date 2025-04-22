@@ -15,7 +15,7 @@ const CompanySendCodingTest = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:5000/company/send-coding-test",
+        "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/send-coding-test",
         { job_id: jobId, 
           coding_test_link: link 
         },
@@ -29,7 +29,7 @@ const CompanySendCodingTest = () => {
       setSuccess(true);
       setError(null);
       
-      const response2 = await axios.post("http://localhost:5000/company/update-job-phase",
+      const response2 = await axios.post("https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/update-job-phase",
         {
           job_id: jobId,
           phase: "coding-test-evaluation",

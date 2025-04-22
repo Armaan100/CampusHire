@@ -7,7 +7,7 @@ const Phase1Card = ({ student, onDecision }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:5000/student/download-resume/${filename}`,
+        `https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/download-resume/${filename}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

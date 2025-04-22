@@ -24,7 +24,7 @@ const CompanyLogin = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/company/login",
+        "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/login",
         company
       );
       if (response.status === 200) {

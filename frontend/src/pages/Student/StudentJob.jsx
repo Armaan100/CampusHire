@@ -20,13 +20,13 @@ const StudentJob = () => {
         const token = localStorage.getItem("token");
         let endpoint = "";
         if (activeTab === "internships") {
-          endpoint = "http://localhost:5000/student/get-internships";
+          endpoint = "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/get-internships";
         } else if (activeTab === "full-time") {
-          endpoint = "http://localhost:5000/student/get-full-time";
+          endpoint = "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/get-full-time";
         } else if (activeTab === "applied-internships") {
-          endpoint = "http://localhost:5000/student/get-applied-internships";
+          endpoint = "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/get-applied-internships";
         } else if (activeTab === "applied-full-time") {
-          endpoint = "http://localhost:5000/student/get-applied-full-time";
+          endpoint = "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/get-applied-full-time";
         }
 
         const response = await axios.get(endpoint, {

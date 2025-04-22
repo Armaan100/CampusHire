@@ -16,7 +16,7 @@ const StudentProtectedRoute = ({ children }) => {
 
         const verifyStudent = async () => {
             try{
-                const response = await axios.get("http://localhost:5000/student/get-profile", {
+                const response = await axios.get("https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/get-profile", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

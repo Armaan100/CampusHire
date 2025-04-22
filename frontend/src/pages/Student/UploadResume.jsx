@@ -46,7 +46,7 @@ const UploadResume = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/student/upload-resume",
+        "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/upload-resume",
         formData,
         {
           headers: {

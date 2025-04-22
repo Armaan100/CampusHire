@@ -39,7 +39,7 @@ const PostJob = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/company/post-job",
+        "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/post-job",
         jobDetails,
         {
           headers: {
