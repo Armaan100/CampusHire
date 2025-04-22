@@ -27,6 +27,10 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get("/", (req, res) => {
+    res.send("Testing...");
+});
+
 app.use("/student", studentRoutes);
 app.use("/company", companyRoutes);
 app.use("/admin", adminRoutes);
