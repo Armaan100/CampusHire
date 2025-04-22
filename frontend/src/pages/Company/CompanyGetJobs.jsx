@@ -10,7 +10,7 @@ const CompanyJobs = () => {
     const fetchJobs = async () => {
         try{
             const token = localStorage.getItem("token");
-            const response = await axios.get("https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/get-jobs", {
+            const response = await axios.get("https://campus-hire-backend-457618.an.r.appspot.com/company/get-jobs", {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

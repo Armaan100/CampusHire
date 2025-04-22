@@ -14,7 +14,7 @@ const CompanyResumeShortlist = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/get-applications/${jobId}`,
+        `https://campus-hire-backend-457618.an.r.appspot.com/company/get-applications/${jobId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ const CompanyResumeShortlist = () => {
         resume_status: decision,
       }
 
-      const response = await axios.post("https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/shortlist-resume", 
+      const response = await axios.post("https://campus-hire-backend-457618.an.r.appspot.com/company/shortlist-resume", 
         shortlistingDetails,
         {
           headers: {
@@ -63,7 +63,7 @@ const CompanyResumeShortlist = () => {
     try {
       const token = localStorage.getItem("token");
       console.log(token);
-      const response = await axios.post("https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/update-job-phase", 
+      const response = await axios.post("https://campus-hire-backend-457618.an.r.appspot.com/company/update-job-phase", 
         {
         job_id: jobId,
         phase: "coding-test",

@@ -16,7 +16,7 @@ const CompanyProtectedRoute = ({ children }) => {
 
         const verifyCompany = async () => {
             try{
-                const response = await axios.get("https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/get-profile", {
+                const response = await axios.get("https://campus-hire-backend-457618.an.r.appspot.com/company/get-profile", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

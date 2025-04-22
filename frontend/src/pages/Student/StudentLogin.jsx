@@ -24,7 +24,7 @@ const StudentLogin = () => {
 
     try {
       const response = await axios.post(
-        "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/login",
+        "https://campus-hire-backend-457618.an.r.appspot.com/student/login",
         student
       );
       console.log("Response: ", response.data);

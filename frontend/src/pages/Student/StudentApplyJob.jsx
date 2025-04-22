@@ -30,7 +30,7 @@ const StudentApplyJob = () => {
         setLoading(true);
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/get-job-details/${jobId}`,
+          `https://campus-hire-backend-457618.an.r.appspot.com/student/get-job-details/${jobId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -53,7 +53,7 @@ const StudentApplyJob = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/apply-job",
+        "https://campus-hire-backend-457618.an.r.appspot.com/student/apply-job",
         { job_id: jobId },
         { headers: { Authorization: `Bearer ${token}` } }
       );

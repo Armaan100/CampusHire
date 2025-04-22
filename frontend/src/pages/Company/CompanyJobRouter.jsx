@@ -11,7 +11,7 @@ const CompanyJobRouter = () => {
     const checkPhase = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(`https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/job-status/${jobId}`, {
+        const response = await axios.get(`https://campus-hire-backend-457618.an.r.appspot.com/company/job-status/${jobId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

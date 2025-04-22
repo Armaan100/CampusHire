@@ -20,13 +20,13 @@ const StudentJob = () => {
         const token = localStorage.getItem("token");
         let endpoint = "";
         if (activeTab === "internships") {
-          endpoint = "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/get-internships";
+          endpoint = "https://campus-hire-backend-457618.an.r.appspot.com/student/get-internships";
         } else if (activeTab === "full-time") {
-          endpoint = "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/get-full-time";
+          endpoint = "https://campus-hire-backend-457618.an.r.appspot.com/student/get-full-time";
         } else if (activeTab === "applied-internships") {
-          endpoint = "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/get-applied-internships";
+          endpoint = "https://campus-hire-backend-457618.an.r.appspot.com/student/get-applied-internships";
         } else if (activeTab === "applied-full-time") {
-          endpoint = "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/get-applied-full-time";
+          endpoint = "https://campus-hire-backend-457618.an.r.appspot.com/student/get-applied-full-time";
         }
 
         const response = await axios.get(endpoint, {

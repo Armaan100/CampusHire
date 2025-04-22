@@ -24,7 +24,7 @@ const CompanyLogin = () => {
 
     try {
       const response = await axios.post(
-        "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/login",
+        "https://campus-hire-backend-457618.an.r.appspot.com/company/login",
         company
       );
       if (response.status === 200) {

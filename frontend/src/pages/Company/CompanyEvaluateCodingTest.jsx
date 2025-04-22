@@ -14,7 +14,7 @@ const CompanyEvaluateCodingTest = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/get-applications-phase2/${jobId}`,
+        `https://campus-hire-backend-457618.an.r.appspot.com/company/get-applications-phase2/${jobId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -41,7 +41,7 @@ const CompanyEvaluateCodingTest = () => {
       }
 
       const token = localStorage.getItem("token");
-      const response = await axios.post("https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/evaluate-coding-test", 
+      const response = await axios.post("https://campus-hire-backend-457618.an.r.appspot.com/company/evaluate-coding-test", 
         evaluateDetails,
         {
           headers: {
@@ -64,7 +64,7 @@ const CompanyEvaluateCodingTest = () => {
     try {
       const token = localStorage.getItem("token");
       console.log(token);
-      const response = await axios.post("https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/company/update-job-phase", 
+      const response = await axios.post("https://campus-hire-backend-457618.an.r.appspot.com/company/update-job-phase", 
         {
         job_id: jobId,
         phase: "interview-schedule",

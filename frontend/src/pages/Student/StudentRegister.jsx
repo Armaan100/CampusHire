@@ -64,7 +64,7 @@ const StudentRegister = () => {
     try {
       console.log("Sending request...");
       const response = await axios.post(
-        "https://campus-hire-kx9vewvzf-armaan-gogois-projects.vercel.app/student/register",
+        "https://campus-hire-backend-457618.an.r.appspot.com/student/register",
         formData
       );
 
