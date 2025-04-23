@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../db/db");
 
-//Register Company
+//Register company
 module.exports.Register = async (req, res) => {
   console.log(req.body);
 
@@ -55,7 +55,7 @@ module.exports.Register = async (req, res) => {
 
             res.status(200).json({
               success: true,
-              message: "Company registered successfully",
+              message: "company registered successfully",
               token,
             });
           }
@@ -71,7 +71,7 @@ module.exports.Register = async (req, res) => {
 };
 
 
-//Login Company
+//Login company
 module.exports.Login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -90,7 +90,7 @@ module.exports.Login = async (req, res) => {
         if (result.length === 0) {
           return res.status(400).json({
             success: false,
-            message: "Company not found",
+            message: "company not found",
           });
         }
 
@@ -115,7 +115,7 @@ module.exports.Login = async (req, res) => {
 
         res.status(200).json({
           success: true,
-          message: "Company logged in successfully",
+          message: "company logged in successfully",
           token,
         });
       }
@@ -129,14 +129,14 @@ module.exports.Login = async (req, res) => {
 };
 
 
-//Logout Company
+//Logout company
 module.exports.Logout = async (req, res) => {
   try {
     res.clearCookie("token");
 
     return res.status(200).json({
       success: true,
-      message: "Company logged out successfully",
+      message: "company logged out successfully",
     });
   } catch (error) {
     return res.status(500).json({
@@ -147,7 +147,7 @@ module.exports.Logout = async (req, res) => {
 };
 
 
-//Get Company Profile
+//Get company Profile
 module.exports.GetProfile = async (req, res) => {
   try {
     const company_id = req.company.company_id;
@@ -165,7 +165,7 @@ module.exports.GetProfile = async (req, res) => {
       if (result.length === 0) {
         return res.status(404).json({
           success: false,
-          message: "Company not found",
+          message: "company not found",
         });
       }
 
@@ -187,7 +187,7 @@ module.exports.GetProfile = async (req, res) => {
 
 
 
-//Post a job (protected to Company)
+//Post a job (protected to company)
 module.exports.PostJob = async (req, res) => {
   try {
     const {title, description, eligibility_cgpa, eligibility_year, salary, type, deadline} = req.body;
@@ -267,7 +267,7 @@ module.exports.GetJobs = async (req, res) => {
   }
 }
 
-//GetApplications
+//Getapplications
 module.exports.GetApplications = async(req, res) => {
   try{
     const company_id = req.company.company_id;
@@ -313,7 +313,7 @@ module.exports.ShortlistResume = async(req, res) => {
     const {roll_number, job_id, resume_status} = req.body;  //resume status tu company r uporot jodi accept button click taar uport -> ('accepted', 'rejected') 
     
     const query = `
-    UPDATE Application
+    UPDATE application
     SET resume_status = ?
     WHERE roll_number = ? AND job_id = ?
     `;
@@ -357,7 +357,7 @@ module.exports.SendCodingTest = async(req, res) => {
     }
 
     const query = `
-    UPDATE Application A, Job J, Student S
+    UPDATE application A, job J, student S
     SET A.coding_test_link = ?
     WHERE A.roll_number = S.roll_number AND A.job_id = J.job_id
     AND A.job_id = ? AND A.resume_status = ? AND J.company_id = ?
@@ -386,7 +386,7 @@ module.exports.SendCodingTest = async(req, res) => {
 }
 
 
-//getApplicationsPhase2 <-> jaar jaar resume shortlist hol and they HAD SUBMITTED THE CODING TEST( to be done yoooo ( student tu kori korim yooo ) ) eheti fetch hobo
+//getapplicationsPhase2 <-> jaar jaar resume shortlist hol and they HAD SUBMITTED THE CODING TEST( to be done yoooo ( student tu kori korim yooo ) ) eheti fetch hobo
 module.exports.GetApplicationsPhase2 = async(req, res) => {
   try{
     const company_id = req.company.company_id;
@@ -435,7 +435,7 @@ module.exports.EvaluateCodingTest = async(req, res) => {
     // cuz, update from frontend koribo and frontend t moi pothaisu only those applications who belongs to that company so, the company will only be visible with hihotor applications
 
     const query = `
-    UPDATE Application
+    UPDATE application
     SET coding_test_status = ?
     WHERE roll_number = ? AND job_id = ?
     `; //coding_test_status = enum('accepted', 'rejected')
@@ -462,7 +462,7 @@ module.exports.EvaluateCodingTest = async(req, res) => {
 }
 
 
-//GetApplicationsPhase3 <-> jaar jaar coding test accept hol eheti fetch hobo
+//GetapplicationsPhase3 <-> jaar jaar coding test accept hol eheti fetch hobo
 module.exports.GetApplicationsPhase3 = async(req, res) => {
   try{
     const company_id = req.company.company_id;
@@ -516,7 +516,7 @@ module.exports.ScheduleInterview = async(req, res) => {
 
     //same iyatu since frontend t only company r applications show koribo so, company_id di query update koribo nelage
     const query = `
-    UPDATE Application
+    UPDATE application
     SET interview_date_time = ?, interview_venue = ?
     WHERE roll_number = ? AND job_id = ?
     `;
@@ -543,8 +543,8 @@ module.exports.ScheduleInterview = async(req, res) => {
 }
 
 
-//GetApplicationsPhase3 <-> jaar jaar coding test accept hol eheti fetch hobo and mark time finally ki interview clear koril ne nai based on the interview
-// module.exports.GetApplicationsPhase3 = async(req, res) => {
+//GetapplicationsPhase3 <-> jaar jaar coding test accept hol eheti fetch hobo and mark time finally ki interview clear koril ne nai based on the interview
+// module.exports.GetapplicationsPhase3 = async(req, res) => {
 //   try{
 //     const company_id = req.company.company_id;
 
@@ -586,7 +586,7 @@ module.exports.EvaluateInterview = async(req, res) => {
     const { roll_number, job_id, interview_status } = req.body;
 
     const query = `
-    UPDATE Application
+    UPDATE application
     SET interview_status = ?, overall_status = ?
     WHERE roll_number = ? AND job_id = ?
     `;
@@ -643,7 +643,7 @@ module.exports.JobStatus = async(req, res) => {
       if(result.length === 0){
         return res.status(404).json({
           success: false,
-          message: "Job not found"
+          message: "job not found"
         });
       }
 
@@ -669,7 +669,7 @@ module.exports.UpdateJobPhase = async(req, res) => {
     const {job_id, phase} = req.body; // phase: 'resume', 'coding-test', 'interview-schedule', 'interview-evaluation', 'complete'
 
     const query = `
-    UPDATE JOB SET phase = ? WHERE job_id = ?
+    UPDATE job SET phase = ? WHERE job_id = ?
     `;
 
     db.query(query, [phase, job_id], (err, result) => {
@@ -682,7 +682,7 @@ module.exports.UpdateJobPhase = async(req, res) => {
 
       return res.status(200).json({
         success: true,
-        message: "Job phase updated successfully"
+        message: "job phase updated successfully"
       })
     });
   }catch(err){
@@ -695,7 +695,7 @@ module.exports.UpdateJobPhase = async(req, res) => {
 
 
 
-// getApplicationsPhase4 <-> jaar jaar interview schedule hol eheti fetch hobo and mark time finally ki interview clear koril ne nai based on the interview
+// getapplicationsPhase4 <-> jaar jaar interview schedule hol eheti fetch hobo and mark time finally ki interview clear koril ne nai based on the interview
 module.exports.GetApplicationsPhase4 = async(req, res) => {
   try{
     const company_id = req.company.company_id;

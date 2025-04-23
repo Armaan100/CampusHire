@@ -124,6 +124,7 @@ module.exports.Login = async (req, res) => {
       [roll_number],
       async (err, result) => {
         if (err) {
+          
           return res.status(500).json({
             success: false,
             error: err.message,
