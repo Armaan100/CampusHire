@@ -78,7 +78,7 @@ const CompnayEvaluateInterview = () => {
     );
     console.log(response.data);
 
-    navigate(`/company/job/complete/${jobId}`);
+    navigate(`/company/job/get-selected-students/${jobId}`);
     } catch (err) {
       console.error("Error updating job phase:", err);
     }
@@ -100,7 +100,7 @@ const CompnayEvaluateInterview = () => {
           className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded"
           onClick={handleDone}
         >
-          Done & Proceed to Coding Test
+          Done & Proceed 
         </button>
       </div>
     </div>

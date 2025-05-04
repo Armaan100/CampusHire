@@ -25,7 +25,8 @@ import CompanySendCodingTest from "./pages/Company/CompanySendCodingTest";
 import CompanyEvaluateCodingTest from "./pages/Company/CompanyEvaluateCodingTest";
 import CompanyScheduleInterview from "./pages/Company/CompanyScheduleInterview";
 import CompanyEvaluateInterview from "./pages/Company/CompanyEvaluateInterview";
-import CompanyComplete from "./pages/Company/CompanyComplete";
+import CompanyGetSelectedStudents from "./pages/Company/CompanyGetSelectedStudents";
+import { GetSelectedStudents } from "../../backend/controllers/company.controller";
 
 function App() {
   return (
@@ -181,10 +182,10 @@ function App() {
 
 
         <Route 
-          path="/company/job/complete/:jobId"
+          path="/company/job/get-selected-students/:jobId"
           element={
             <CompanyProtectedRoute>
-              <CompanyComplete />
+              <CompanyGetSelectedStudents />
             </CompanyProtectedRoute>
           }
         />

@@ -36,7 +36,7 @@ const CompanyJobRouter = () => {
             navigate(`/company/job/evaluate-interview/${jobId}`);
             break;
           case 'complete':
-            navigate(`/company/job/complete/${jobId}`);
+            navigate(`/company/job/get-selected-students/${jobId}`);
             break;
           default:
             alert('Invalid phase or something went wrong!');
