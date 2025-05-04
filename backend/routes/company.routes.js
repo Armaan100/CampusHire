@@ -47,6 +47,8 @@ router.get("/job-status/:job_id", authCompany, companyController.JobStatus);
 
 router.post("/update-job-phase/", authCompany, companyController.UpdateJobPhase);
 
+router.get("/get-selected-students/:job_id", authCompany, companyController.GetSelectedStudents)
+
 module.exports = router;
 
 //remaining with -> validation of these routes + controller for student after applying to the company, i.e., submitting the coding test and all

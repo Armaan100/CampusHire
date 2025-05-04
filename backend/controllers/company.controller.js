@@ -731,3 +731,52 @@ module.exports.GetApplicationsPhase4 = async(req, res) => {
     });
   }
 }
+
+
+
+
+// GetSelectedStudents
+module.exports.GetSelectedStudents = async(req, res) => {
+  try{
+    // const company_id = req.company.company_id;
+    const {job_id} = req.params;
+    console.log(req.company);
+
+    // fetch the students who have been selected for this company
+    const query = `
+    SELECT A.roll_number, S.name, S.email, S.phone, S.branch, S.semester, S.city, S.state
+    FROM application A, student S
+    WHERE A.roll_number = S.roll_number 
+    AND A.overall_status = 'accepted' 
+    AND A.job_id = ?
+    `
+
+    db.query(query, [job_id], (err, result) => {
+      if(err){
+        return res.status(500).json({
+          success: false,
+          error: err.message
+        });
+      }
+
+      if(result.length === 0){
+        return res.status(404).json({
+          success: false,
+          message: "No students selected for this job"
+        });
+      }
+
+      console.log(result);
+
+      return res.status(200).json({
+        success: true,
+        students: result
+      })
+    })
+  }catch(err){
+    res.status(500).json({
+      success: false,
+      error: err.message
+    })
+  }
+}
